@@ -12,7 +12,7 @@ On later launches, run the same starter or `Launch BobHead.cmd` inside the extra
 
 ![First-launch model setup](screenshots/model-downloads.png)
 
-Click **Download models**. The main downloads total about **101.6 GB**. Download speed depends on your connection. Keep enough extra space for the extracted runtime, supporting models, temporary files, and generated videos.
+Click **Download required models**. The main downloads total about **101.6 GB**. Download speed depends on your connection. Keep enough extra space for the extracted runtime, supporting models, temporary files, and generated videos.
 
 Downloads are checked against recorded sizes and SHA256 hashes. The app can pause and resume model downloads. See [MODELS.md](../MODELS.md) for direct publisher links and destination folders if you prefer manual downloads.
 
@@ -26,7 +26,7 @@ Supporting caption, segmentation, and pose models may download when you run the 
 
 Choose a short clip of a person talking. For a first test, use the included [before.mp4](media/before.mp4), which contains dialogue. Start with approximately five seconds. The app accepts up to 256 MB per upload and supports short selections up to ten seconds.
 
-Choose the duration, optionally enter a description, and click **Make BobHead**. The head size is fixed by the workflow. Leave the app and console running while progress advances. The demonstrated five-second example took around ten minutes on the reference 96 GiB GPU; other hardware and settings can differ considerably.
+Choose the duration, optionally enter a description, and click **Make me a bobhead**. The head size is fixed by the workflow. Leave the app and console running while progress advances. The demonstrated five-second example took around ten minutes on the reference 96 GiB GPU; other hardware and settings can differ considerably.
 
 ## 4. Preview and save
 
