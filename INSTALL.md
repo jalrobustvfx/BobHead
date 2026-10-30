@@ -35,10 +35,11 @@ Wait until all 12 models show **Installed**. You can pause and resume the model 
 
 ## 4. Make your first video
 
-1. Upload a short clip of a person talking. You can try the included **[example clip with dialogue](docs/media/before.mp4)**.
-2. Choose the clip length. Five seconds is a good starting point.
-3. Click **Make me a bobhead** and wait for generation to finish.
-4. Preview the result with sound, then click **Download MP4**.
+1. **[Download the example source video with dialogue (MP4, 5.3 MB)](https://raw.githubusercontent.com/jalrobustvfx/BobHead/main/docs/media/before.mp4)**. If it opens in your browser, use the video's download menu or right-click and choose **Save video as**. This is `Tonigh_v003.mp4`, stored in the repository as `before.mp4`.
+2. Upload the saved video in BobHead.
+3. Choose **5 seconds** for the example clip.
+4. Click **Make me a bobhead** and wait for generation to finish.
+5. Preview the result with sound, then click **Download MP4**. You can compare it with the [included example result](docs/media/after.mp4).
 
 Head size is fixed by the workflow, and the original dialogue is carried into the output.
 
