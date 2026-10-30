@@ -57,4 +57,4 @@ git clone https://github.com/jalrobustvfx/BobHead.git
 
 The source download includes the app code, workflow, custom pose node, documentation, and examples. It does not include the bundled Python/ComfyUI runtime or model weights. To run the complete Windows app, use the release starter above. For source setup, see the **[developer guide](docs/DEVELOPMENT.md)**.
 
-**[Watch the 1:55 walkthrough](docs/media/how-to-use-me.mp4)** · **[Illustrated quick start and troubleshooting](docs/QUICKSTART.md)** · **[Model links and folders](MODELS.md)**
+**[Watch the tutorial on YouTube](https://youtu.be/cc84p_qUgdo)** · **[Download the walkthrough MP4](docs/media/how-to-use-me.mp4)** · **[Illustrated quick start and troubleshooting](docs/QUICKSTART.md)** · **[Model links and folders](MODELS.md)**

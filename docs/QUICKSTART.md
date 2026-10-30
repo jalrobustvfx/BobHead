@@ -30,7 +30,7 @@ Choose the duration, optionally enter a description, and click **Make me a bobhe
 
 Play the result with sound and click the download button to save the MP4. The output includes the original dialogue.
 
-[Watch the 1:55 walkthrough](media/how-to-use-me.mp4) · [See the before/after comparison](media/before-after.mp4) · [Download example files](../exmaples%20files)
+[Watch the tutorial on YouTube](https://youtu.be/cc84p_qUgdo) · [Download the walkthrough MP4](media/how-to-use-me.mp4) · [See the before/after comparison](media/before-after.mp4) · [Download example files](../exmaples%20files)
 
 The narrated walkthrough uses the creator's own footage and shows the GitHub starter download, included files, model setup, upload, generation, and saving. Installation and generation waits are skipped.
 
