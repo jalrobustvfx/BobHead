@@ -2,9 +2,21 @@
 
 Turn a short video of someone talking into a bobhead video, with an enlarged head, the original head movement, and the original dialogue.
 
-[![Animated comparison of the original footage and BobHead result](docs/media/before-after.gif)](docs/media/before-after.mp4)
+## See it in action
 
-*A looping preview of the original and generated video. Click to watch with sound.*
+### Motion example
+
+[![Looping BobHead motion comparison with the pose guide](docs/media/chan01.gif)](docs/media/chan01.mp4)
+
+Modified clip on the left, original on the right, with the pose guide below. **[Watch the full video](docs/media/chan01.mp4)**.
+
+### Joker example
+
+[![Looping BobHead Joker comparison with the pose guide](docs/media/jocker01.gif)](docs/media/jocker01.mp4)
+
+Modified clip on the left, original on the right, with the pose guide below. **[Watch the full video](docs/media/jocker01.mp4)**.
+
+The GIF previews loop silently. Open either full video for its audio.
 
 **[Watch the before/after comparison](docs/media/before-after.mp4)** · **[Watch the 1:54 walkthrough](docs/media/how-to-use.mp4)** · **[Download the Windows app](https://github.com/jalrobustvfx/BobHead/releases/latest)**
 
@@ -25,23 +37,11 @@ Keep the installation folder for future launches. Run the same starter again; co
 
 See the [illustrated quick start and troubleshooting guide](docs/QUICKSTART.md). GitHub's **Source code.zip** contains the project source; the release starter installs the complete runtime.
 
-## See it in action
+## Talking clip used in the walkthrough
 
-### Motion example
+[![Animated comparison of the original footage and BobHead result](docs/media/before-after.gif)](docs/media/before-after.mp4)
 
-[![Looping BobHead motion comparison with the pose guide](docs/media/chan01.gif)](docs/media/chan01.mp4)
-
-Modified clip on the left, original on the right, with the pose guide below. **[Watch the full video](docs/media/chan01.mp4)**.
-
-### Joker example
-
-[![Looping BobHead Joker comparison with the pose guide](docs/media/jocker01.gif)](docs/media/jocker01.mp4)
-
-Modified clip on the left, original on the right, with the pose guide below. **[Watch the full video](docs/media/jocker01.mp4)**.
-
-The GIF previews loop silently. Open either full video for its audio.
-
-### Talking clip used in the walkthrough
+*A looping preview of the original and generated video. Click to watch with sound.*
 
 | Original talking clip | Generated BobHead |
 | --- | --- |
