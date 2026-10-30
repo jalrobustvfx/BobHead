@@ -3,6 +3,7 @@
 - `before.mp4`: the supplied `Tonigh_v003.mp4` talking-person example, about five seconds, with its original dialogue.
 - `after.mp4`: the actual BobHead v06 result generated from that clip, with the source audio.
 - `before-after.mp4`: side-by-side comparison with the result audio.
+- `before-after.gif`: a silent, looping preview of the comparison for the repository README; click the preview to open the video with dialogue.
 - `how-to-use.mp4`: the accepted 1 minute 54 second narrated and captioned walkthrough.
 - `how-to-use.srt` and `how-to-use-transcript.txt`: captions and transcript.
 

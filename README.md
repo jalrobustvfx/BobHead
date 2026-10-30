@@ -2,7 +2,9 @@
 
 Turn a short video of someone talking into a bobhead video, with an enlarged head, the original head movement, and the original dialogue.
 
-![Original footage and BobHead result](docs/screenshots/before-after.jpg)
+[![Animated comparison of the original footage and BobHead result](docs/media/before-after.gif)](docs/media/before-after.mp4)
+
+*A looping preview of the original and generated video. Click to watch with sound.*
 
 **[Watch the before/after comparison](docs/media/before-after.mp4)** · **[Watch the 1:54 walkthrough](docs/media/how-to-use.mp4)** · **[Download the Windows app](https://github.com/jalrobustvfx/BobHead/releases/latest)**
 
