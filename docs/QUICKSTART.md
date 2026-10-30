@@ -12,19 +12,13 @@ On later launches, run the same starter or `Launch BobHead.cmd` inside the extra
 
 ## 2. Download models
 
-![First-launch model setup](screenshots/model-downloads.png)
-
 Click **Download required models**. The main downloads total about **101.6 GB**. Download speed depends on your connection. Keep enough extra space for the extracted runtime, supporting models, temporary files, and generated videos.
 
 Downloads are checked against recorded sizes and SHA256 hashes. The app can pause and resume model downloads. See [MODELS.md](../MODELS.md) for direct publisher links and destination folders if you prefer manual downloads.
 
-![Models installed](screenshots/models-installed.png)
-
 Supporting caption, segmentation, and pose models may download when you run the first generation. Keep Internet access available until that finishes.
 
 ## 3. Upload and generate
-
-![Upload a talking clip](screenshots/upload.png)
 
 Choose a short clip of a person talking. For a first test, use the included [before.mp4](media/before.mp4), which contains dialogue. Start with approximately five seconds. The app accepts up to 256 MB per upload and supports short selections up to ten seconds.
 
@@ -32,13 +26,11 @@ Choose the duration, optionally enter a description, and click **Make me a bobhe
 
 ## 4. Preview and save
 
-![Completed BobHead result](screenshots/result.png)
+![Completed BobHead result](screenshots/interface-me-full.jpg)
 
 Play the result with sound and click the download button to save the MP4. The output includes the original dialogue.
 
-[Watch the narrated walkthrough](media/how-to-use.mp4) · [See the before/after comparison](media/before-after.mp4)
-
-The walkthrough starts with an extracted app folder. The release starter handles that download and extraction for you; its result is the same folder containing `Launch BobHead.cmd`.
+[See the before/after comparison](media/before-after.mp4) · [Download example files](../exmaples%20files)
 
 ## Troubleshooting
 

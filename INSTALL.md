@@ -29,13 +29,11 @@ The starter uses the bundled ComfyUI installation automatically. You do not need
 
 On the first launch, click **Download required models** in the app. The 12 main model files total approximately **101.6 GB**. Model weights are downloaded separately from their publishers to keep the app download smaller.
 
-![Model download screen](docs/screenshots/model-downloads.png)
-
 Wait until all 12 models show **Installed**. You can pause and resume the model downloads. Supporting caption, segmentation, and pose models may download during the first generation, so keep Internet access available until it finishes.
 
 ## 4. Make your first video
 
-1. **[Download the example source video with dialogue (MP4, 5.3 MB)](https://raw.githubusercontent.com/jalrobustvfx/BobHead/main/docs/media/before.mp4)**. If it opens in your browser, use the video's download menu or right-click and choose **Save video as**. This is `Tonigh_v003.mp4`, stored in the repository as `before.mp4`.
+1. **[Download the example source video with dialogue (MP4, 1.1 MB)](https://raw.githubusercontent.com/jalrobustvfx/BobHead/main/docs/media/before.mp4)**. If it opens in your browser, use the video's download menu or right-click and choose **Save video as**. This is `Me01.mp4`, stored in the repository as `before.mp4`.
 2. Upload the saved video in BobHead.
 3. Choose **5 seconds** for the example clip.
 4. Click **Make me a bobhead** and wait for generation to finish.
@@ -59,4 +57,4 @@ git clone https://github.com/jalrobustvfx/BobHead.git
 
 The source download includes the app code, workflow, custom pose node, documentation, and examples. It does not include the bundled Python/ComfyUI runtime or model weights. To run the complete Windows app, use the release starter above. For source setup, see the **[developer guide](docs/DEVELOPMENT.md)**.
 
-**[Illustrated quick start and troubleshooting](docs/QUICKSTART.md)** · **[1:54 walkthrough](docs/media/how-to-use.mp4)** · **[Model links and folders](MODELS.md)**
+**[Illustrated quick start and troubleshooting](docs/QUICKSTART.md)** · **[Model links and folders](MODELS.md)**
