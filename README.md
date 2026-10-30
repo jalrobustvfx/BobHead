@@ -1,5 +1,7 @@
 # BobHead
 
+![BobHead app interface with the original clip and generated result](docs/screenshots/result.png)
+
 Turn a short video of someone talking into a bobhead video, with an enlarged head, the original head movement, and the original dialogue.
 
 ## See it in action
@@ -50,8 +52,6 @@ See the [illustrated quick start and troubleshooting guide](docs/QUICKSTART.md).
 | [Play before.mp4](docs/media/before.mp4) | [Play after.mp4](docs/media/after.mp4) |
 
 The example uses the supplied `Tonigh_v003.mp4` clip with audible dialogue. The generated result keeps that dialogue. The [walkthrough](docs/media/how-to-use.mp4) is 1 minute 54 seconds, with narration and captions. It shows the extracted app folder; the release starter downloads and extracts that folder automatically. [Transcript](docs/media/how-to-use-transcript.txt) · [Subtitles](docs/media/how-to-use.srt).
-
-![BobHead app with a completed result](docs/screenshots/result.png)
 
 ## How it works
 
