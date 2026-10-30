@@ -10,6 +10,8 @@ Built for the [ComfyUI open-source competition](https://comfy.org/open-source-hi
 
 ## Run the app
 
+**New to GitHub? Follow the [download and installation guide](INSTALL.md)** for exactly which file to click and how to set up the app.
+
 1. Open the [latest release](https://github.com/jalrobustvfx/BobHead/releases/latest) and download **Start-BobHead.cmd** into an empty folder on a drive with plenty of space.
 2. Double-click **Start-BobHead.cmd**. It downloads and extracts the bundled Windows runtime, verifies the download, and launches BobHead. Python, ComfyUI, and the required custom nodes are included.
 3. On the first launch, click **Download required models** in the app. The 12 main model files total approximately **101.6 GB**, with additional supporting downloads on the first generation. Model weights are downloaded from their publishers; they are not included in the app download.

@@ -1,5 +1,7 @@
 # BobHead quick start
 
+For step-by-step directions on downloading from GitHub, start with the **[installation guide](../INSTALL.md)**.
+
 ## 1. Launch
 
 Download **Start-BobHead.cmd** from the [latest release](https://github.com/jalrobustvfx/BobHead/releases/latest). Save it in an empty folder on the drive where you want BobHead installed, then double-click it.
