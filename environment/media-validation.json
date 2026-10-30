@@ -1,0 +1,27 @@
+{
+  "status": "passed",
+  "duration_seconds": 113.958,
+  "file_bytes": 10900290,
+  "source_rms": 0.05556607359111733,
+  "result_rms": 0.053683412245530464,
+  "source_result_dialogue_similarity": 0.995055544028529,
+  "audible_example_chapters": {
+    "input_preview": {
+      "rms": 0.13581011778791835,
+      "audio_match": 0.9875392152177762
+    },
+    "comparison": {
+      "rms": 0.13337841304287001,
+      "audio_match": 0.9955087526910976
+    }
+  },
+  "full_decode": "passed",
+  "resolution": [
+    1920,
+    1080
+  ],
+  "source_example": "docs/media/before.mp4",
+  "generated_example": "docs/media/after.mp4",
+  "workflow": "v06",
+  "tested_gpu": "NVIDIA RTX PRO 6000 Blackwell, 96 GiB VRAM"
+}

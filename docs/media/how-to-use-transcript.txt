@@ -1,0 +1,41 @@
+00:00  BOBHEAD / QUICK START
+Here's BobHead. Give it a talking clip, and it makes a big-head version with the same dialogue.
+
+00:07  01 / EXTRACT
+Unzip the download, then open the BobHead folder. Keep everything here together.
+
+00:15  02 / WHAT'S INCLUDED
+The app, ComfyUI, custom nodes, and workflow are included. The readme is there if you need help.
+
+00:23  03 / LAUNCH
+Double-click Launch BobHead. That's the only file you need to open. It starts the engine and brings up the app.
+
+00:32  04 / FIRST-TIME SETUP
+The first time, click Download required models. It's about a hundred and two gigabytes, so leave plenty of space and keep your internet on.
+
+00:43  05 / SETUP COMPLETE
+You can pause and pick up later. Once all twelve models say Installed, close this window. You only do this setup once.
+
+00:54  06 / UPLOAD
+Drop in your talking clip, or click here to choose one. This time, we're using the clip with the original sound.
+
+01:03  LISTEN / THE ORIGINAL CLIP
+Before-and-after playback with original dialogue.
+
+01:08  07 / CHOOSE THE LENGTH
+Choose how many seconds to use. Five is a good start. The head effect is already set, so there's nothing else to adjust.
+
+01:18  08 / GENERATE
+Now click Make me a bobhead. The first frame guides the look, and the video guides the movement.
+
+01:26  09 / WATCH THE PROGRESS
+Let it finish. This can take a few minutes, so I've skipped the wait.
+
+01:33  10 / PLAY & SAVE
+Here's the result, with the original dialogue. Play it back, then use the download button to save it.
+
+01:41  THE RESULT / BEFORE & AFTER
+Before-and-after playback with original dialogue.
+
+01:46  READY FOR THE NEXT CLIP?
+To make another, click Replace and choose your next clip. That's all there is to it.
