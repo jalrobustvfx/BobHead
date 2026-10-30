@@ -4,6 +4,9 @@ __pycache__/
 venv/
 .data/
 .cache/
+cache/
+BobHead-downloads/
+BobHead-Standalone-*/
 .env
 .env.*
 !.env.example
@@ -24,6 +27,7 @@ release-assets/
 *.zip
 *.7z
 *.part
+*.zip.part*
 *.log
 standalone-build.json
 standalone-copy-checkpoint.json
