@@ -80,7 +80,12 @@ else { $root = '\\?\' + $root }
 $zip = [IO.Compression.ZipFile]::OpenRead($archive)
 try {
     foreach ($entry in $zip.Entries) {
-        $path = [IO.Path]::GetFullPath($root + $entry.FullName.Replace('/', '\'))
+        $entryName = $entry.FullName.Replace('/', '\')
+        if ($entryName.StartsWith('\') -or $entryName.Contains(':') -or
+            ($entryName.Split('\') -contains '..')) {
+            throw 'The archive contains an unsafe path.'
+        }
+        $path = [IO.Path]::GetFullPath($root + $entryName)
         if (-not $path.StartsWith($root, [StringComparison]::OrdinalIgnoreCase)) {
             throw 'The archive contains a path outside the installation folder.'
         }
