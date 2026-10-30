@@ -10,7 +10,7 @@ Turn a short video of someone talking into a bobhead video, with an enlarged hea
 
 The creator's own footage: original on the left, enlarged-head result on the right. The GIF loops silently; **[watch the comparison with sound](docs/media/before-after.mp4)**.
 
-**[Download the Windows app](https://github.com/jalrobustvfx/BobHead/releases/latest)** · **[Download before and after example files](exmaples%20files)**
+**[Download the Windows app](https://github.com/jalrobustvfx/BobHead/releases/latest)** · **[Download before and after example files](exmaples%20files)** · **[Watch the 1:55 walkthrough](docs/media/how-to-use-me.mp4)**
 
 Built for the [ComfyUI open-source competition](https://comfy.org/open-source-higgsfield/). This repository includes the app, v06 workflow, custom pose effect, setup instructions, and actual input/output examples.
 

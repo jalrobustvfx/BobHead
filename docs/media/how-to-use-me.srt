@@ -1,0 +1,99 @@
+1
+00:00:00,350 --> 00:00:06,171
+Here's BobHead: a big-head version of your clip, keeping the movement and original
+
+2
+00:00:06,171 --> 00:00:06,619
+dialogue.
+
+3
+00:00:07,642 --> 00:00:11,923
+Open BobHead on GitHub and go to Releases.
+
+4
+00:00:11,923 --> 00:00:15,135
+Under Assets, download Start-BobHead dot cmd.
+
+5
+00:00:16,142 --> 00:00:20,212
+Put that file in an empty folder and double-click it.
+
+6
+00:00:20,212 --> 00:00:24,690
+It downloads the app, starts the engine, and opens your browser.
+
+7
+00:00:25,725 --> 00:00:30,473
+Python, ComfyUI, custom nodes, and the workflow are included.
+
+8
+00:00:30,473 --> 00:00:32,583
+Keep the folder together.
+
+9
+00:00:33,600 --> 00:00:37,678
+On first launch, click Download Required Models.
+
+10
+00:00:37,678 --> 00:00:41,755
+Allow about 102 gigabytes, plus extra space.
+
+11
+00:00:41,755 --> 00:00:44,668
+You can pause and resume.
+
+12
+00:00:45,683 --> 00:00:51,931
+Mine are already installed. Once all twelve say Installed, close this window.
+
+13
+00:00:51,931 --> 00:00:56,096
+Supporting models may download during your first generation.
+
+14
+00:00:57,100 --> 00:01:01,252
+Drop in a talking clip, or click to choose one.
+
+15
+00:01:01,252 --> 00:01:05,403
+This example uses my own footage, with its original sound.
+
+16
+00:01:11,433 --> 00:01:16,986
+Choose five seconds to start. The head effect is already set, so there's
+
+17
+00:01:16,986 --> 00:01:19,122
+no size slider to adjust.
+
+18
+00:01:20,142 --> 00:01:25,199
+Click Make Me a BobHead. The first frame guides the look, and the
+
+19
+00:01:25,199 --> 00:01:26,755
+video guides the movement.
+
+20
+00:01:27,767 --> 00:01:31,311
+This run took about four minutes on my GPU.
+
+21
+00:01:31,311 --> 00:01:33,280
+I've skipped the wait here.
+
+22
+00:01:34,308 --> 00:01:37,349
+Here's the result with the original dialogue.
+
+23
+00:01:37,349 --> 00:01:41,692
+Play it back, then click Download MP4 to save it.
+
+24
+00:01:47,558 --> 00:01:53,216
+Click Replace to try another clip. The before and after files are on
+
+25
+00:01:53,216 --> 00:01:54,087
+GitHub, too.

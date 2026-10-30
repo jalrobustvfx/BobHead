@@ -1,0 +1,26 @@
+{
+  "status": "passed",
+  "duration_seconds": 114.75,
+  "file_bytes": 11878110,
+  "source_file": "Me01.mp4",
+  "source_rms": 0.032934824772971584,
+  "result_rms": 0.034204536767359434,
+  "source_result_dialogue_similarity": 0.9997618046183897,
+  "audible_example_chapters": {
+    "input_preview": {
+      "rms": 0.1468087648969134,
+      "audio_match": 0.9989014533402922
+    },
+    "comparison": {
+      "rms": 0.14591294693120543,
+      "audio_match": 0.9994367874075799
+    }
+  },
+  "full_decode": "passed",
+  "resolution": [
+    1920,
+    1080
+  ],
+  "sha256": "5fc6c3b7113e3ce42320584358f21daaaf7f3cfe3a32927b96002909478c2414",
+  "generated_job_id": "13d690143fff0239fd12103ba07876b3"
+}

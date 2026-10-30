@@ -1,0 +1,41 @@
+00:00  BOBHEAD / QUICK START
+Here's BobHead: a big-head version of your clip, keeping the movement and original dialogue.
+
+00:07  01 / GET THE APP
+Open BobHead on GitHub and go to Releases. Under Assets, download Start-BobHead dot cmd.
+
+00:15  02 / LAUNCH
+Put that file in an empty folder and double-click it. It downloads the app, starts the engine, and opens your browser.
+
+00:25  03 / INCLUDED FILES
+Python, ComfyUI, custom nodes, and the workflow are included. Keep the folder together.
+
+00:33  04 / ONE-TIME SETUP
+On first launch, click Download Required Models. Allow about 102 gigabytes, plus extra space. You can pause and resume.
+
+00:45  04 / ONE-TIME SETUP
+Mine are already installed. Once all twelve say Installed, close this window. Supporting models may download during your first generation.
+
+00:56  05 / YOUR FOOTAGE
+Drop in a talking clip, or click to choose one. This example uses my own footage, with its original sound.
+
+01:06  YOUR CLIP / SOUND ON
+Before-and-after playback with original dialogue.
+
+01:11  06 / CLIP LENGTH
+Choose five seconds to start. The head effect is already set, so there's no size slider to adjust.
+
+01:19  07 / GENERATE
+Click Make Me a BobHead. The first frame guides the look, and the video guides the movement.
+
+01:27  07 / GENERATE
+This run took about four minutes on my GPU. I've skipped the wait here.
+
+01:33  08 / SAVE YOUR VIDEO
+Here's the result with the original dialogue. Play it back, then click Download MP4 to save it.
+
+01:42  THE RESULT / BEFORE & AFTER
+Before-and-after playback with original dialogue.
+
+01:47  READY FOR YOUR NEXT CLIP
+Click Replace to try another clip. The before and after files are on GitHub, too.
