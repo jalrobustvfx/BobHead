@@ -32,6 +32,8 @@ Built for the [ComfyUI open-source competition](https://comfy.org/open-source-hi
 
 ## Run the app
 
+**[Example files: before.mp4 and after.mp4](exmaples%20files)** — download the source footage to test BobHead and compare it with the enlarged-head result.
+
 **Jury test clip: [Download the original talking video with audio (MP4, 5.3 MB)](https://raw.githubusercontent.com/jalrobustvfx/BobHead/main/docs/media/before.mp4).** This is the supplied `Tonigh_v003.mp4`, stored here as `before.mp4`. Save the video to your computer, upload it in BobHead, choose **5 seconds**, and click **Make me a bobhead**. Compare your output with the [included result](docs/media/after.mp4).
 
 **New to GitHub? Follow the [download and installation guide](INSTALL.md)** for exactly which file to click and how to set up the app.
