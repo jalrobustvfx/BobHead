@@ -1,6 +1,6 @@
 # BobHead
 
-![BobHead app interface with the original clip and generated result](docs/screenshots/result.png)
+[![Complete BobHead app interface, including header, video panels, controls, and footer](docs/screenshots/interface-full.jpg)](docs/screenshots/interface-full.jpg)
 
 Turn a short video of someone talking into a bobhead video, with an enlarged head, the original head movement, and the original dialogue.
 
