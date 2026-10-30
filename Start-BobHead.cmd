@@ -102,10 +102,14 @@ if (-not $archiveValid) {
 Write-Host 'Extracting the bundled runtime. This can take several minutes...'
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 $root = [IO.Path]::GetFullPath($installParent).TrimEnd('\') + '\'
+# Use extended Windows paths so the included package license paths extract
+# correctly even when the installation folder is nested inside Downloads.
+if ($root.StartsWith('\\')) { $root = '\\?\UNC\' + $root.Substring(2) }
+else { $root = '\\?\' + $root }
 $zip = [IO.Compression.ZipFile]::OpenRead($archive)
 try {
     foreach ($entry in $zip.Entries) {
-        $path = [IO.Path]::GetFullPath((Join-Path $installParent $entry.FullName))
+        $path = [IO.Path]::GetFullPath($root + $entry.FullName.Replace('/', '\'))
         if (-not $path.StartsWith($root, [StringComparison]::OrdinalIgnoreCase)) {
             throw 'The archive contains a path outside the installation folder.'
         }
