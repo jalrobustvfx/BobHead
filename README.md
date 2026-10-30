@@ -27,6 +27,22 @@ See the [illustrated quick start and troubleshooting guide](docs/QUICKSTART.md).
 
 ## See it in action
 
+### Motion example
+
+[![Looping BobHead motion comparison with the pose guide](docs/media/chan01.gif)](docs/media/chan01.mp4)
+
+Modified clip on the left, original on the right, with the pose guide below. **[Watch the full video](docs/media/chan01.mp4)**.
+
+### Joker example
+
+[![Looping BobHead Joker comparison with the pose guide](docs/media/jocker01.gif)](docs/media/jocker01.mp4)
+
+Modified clip on the left, original on the right, with the pose guide below. **[Watch the full video](docs/media/jocker01.mp4)**.
+
+The GIF previews loop silently. Open either full video for its audio.
+
+### Talking clip used in the walkthrough
+
 | Original talking clip | Generated BobHead |
 | --- | --- |
 | [Play before.mp4](docs/media/before.mp4) | [Play after.mp4](docs/media/after.mp4) |

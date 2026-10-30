@@ -4,6 +4,8 @@
 - `after.mp4`: the actual BobHead v06 result generated from that clip, with the source audio.
 - `before-after.mp4`: side-by-side comparison with the result audio.
 - `before-after.gif`: a silent, looping preview of the comparison for the repository README; click the preview to open the video with dialogue.
+- `chan01.mp4` and `chan01.gif`: the supplied motion comparison, with the modified clip on the left, original on the right, and pose guide below. The GIF is a silent, looping preview; the MP4 keeps the supplied audio.
+- `jocker01.mp4` and `jocker01.gif`: the supplied Joker comparison in the same layout. The GIF is a silent, looping preview; the MP4 keeps the supplied audio. The original filename is retained.
 - `how-to-use.mp4`: the accepted 1 minute 54 second narrated and captioned walkthrough.
 - `how-to-use.srt` and `how-to-use-transcript.txt`: captions and transcript.
 
