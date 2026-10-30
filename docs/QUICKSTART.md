@@ -36,6 +36,8 @@ Play the result with sound and click the download button to save the MP4. The ou
 
 [Watch the narrated walkthrough](media/how-to-use.mp4) · [See the before/after comparison](media/before-after.mp4)
 
+The walkthrough starts with an extracted app folder. The release starter handles that download and extraction for you; its result is the same folder containing `Launch BobHead.cmd`.
+
 ## Troubleshooting
 
 | Symptom | What to do |
