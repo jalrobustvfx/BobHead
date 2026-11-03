@@ -1,3 +1,8 @@
+async function apiFetch(...args) {
+  const response = await fetch(...args);
+  if(response.status === 401) { window.location.assign('/login'); throw new Error('Please sign in to continue.'); }
+  return response;
+}
 const $ = id => document.getElementById(id);
 let upload = null, ready = false, busy = false, localUrl = null, jobId = null, pollTimer = null, startedAt = null, preflight = null;
 function error(message) { $('error').textContent = message; $('error').hidden = !message; }
@@ -16,20 +21,24 @@ document.querySelectorAll('[data-head-size]').forEach(button => button.addEventL
 syncHeadSize();
 async function checkEngine() {
   try {
-    const response = await fetch('/api/preflight'); preflight = await response.json(); ready = preflight.ready;
+    const response = await apiFetch('/api/preflight'); preflight = await response.json(); ready = preflight.ready;
+    const cloud = preflight.backend === 'comfy-api';
+    $('upload-hint').textContent = `MP4, MOV, WEBM · UP TO ${Math.round((preflight.max_upload_bytes || 256*1024*1024)/1024/1024)} MB`;
+    if(cloud) { $('setup-help').textContent = 'Your video is processed on Comfy’s cloud GPU. There are no models to install on your computer. The first job after inactivity may wait for the cloud engine to start.'; $('privacy-note').textContent = 'Your clip is sent to Comfy’s cloud service. This demo removes its local copies of uploads and results after 24 hours; cloud-provider retention is separate. Only upload footage you have permission to share.'; }
     $('engine-button').className = `engine ${ready ? 'ready' : 'offline'}`;
-    $('engine-label').textContent = ready ? 'Engine connected' : preflight.connected ? 'Setup needed' : 'Engine offline';
+    $('engine-label').textContent = cloud ? (ready ? 'Cloud connected' : 'Cloud unavailable') : ready ? 'Engine connected' : preflight.connected ? 'Setup needed' : 'Engine offline';
     const details = $('setup-details'); details.replaceChildren();
     const intro = document.createElement('p'); intro.textContent = preflight.connected ? `${preflight.workflow || 'BobHead workflow'} · ComfyUI ${preflight.comfy_version} · ${preflight.node_count} nodes. ${preflight.device}` : 'The engine is not connected.'; details.append(intro);
     if (preflight.issues?.length) { const list = document.createElement('ul'); preflight.issues.forEach(issue => { const li = document.createElement('li'); li.textContent = issue; list.append(li); }); details.append(list); }
-    else { const p = document.createElement('p'); p.textContent = 'Required node types and listed model selections are available. A generation is still the final check.'; details.append(p); }
+    else { const p = document.createElement('p'); p.textContent = cloud ? 'Cloud credentials are connected. A completed generation is the final workflow check.' : 'Required node types and listed model selections are available. A generation is still the final check.'; details.append(p); }
   } catch (e) { ready = false; $('engine-label').textContent = 'App disconnected'; $('setup-details').textContent = 'Cannot reach the BobHead server. Restart the launcher.'; }
   updateButton();
 }
 async function chooseFile(file) {
   if (!file || busy) return;
   error(''); upload = null; updateButton();
-  if (file.size > 256*1024*1024) { error('Choose a video smaller than 256 MB.'); return; }
+  const uploadLimit = preflight?.max_upload_bytes || 256*1024*1024;
+  if (file.size > uploadLimit) { error(`Choose a video smaller than ${Math.round(uploadLimit/1024/1024)} MB.`); return; }
   if (!/\.(mp4|mov|webm|mkv|avi)$/i.test(file.name)) { error('Choose an MP4, MOV, WebM, MKV or AVI video.'); return; }
   if(localUrl) URL.revokeObjectURL(localUrl); localUrl = URL.createObjectURL(file);
   $('input-video').src = localUrl; $('input-video').hidden = false; $('dropzone').hidden = true;
@@ -61,9 +70,11 @@ function showJob(job) {
     if(job.options) { $('duration').value = job.options.duration; $('head-size').value = job.options.head_size ?? 1.7; syncHeadSize(); $('prompt').value = job.options.prompt || ''; }
   }
   $('progress-area').hidden = false; $('stage').textContent = job.stage;
+  $('cancel-job').hidden = preflight?.backend !== 'comfy-api' || ['complete','error','cancelled','unknown'].includes(job.status);
   startedAt = job.created * 1000; const seconds = Math.floor(((job.completed ? job.completed*1000 : Date.now())-startedAt)/1000); $('elapsed').textContent = `${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,'0')}`;
   if(job.step?.max > 0) { $('step-progress').value = job.step.value; $('step-progress').max = job.step.max; $('progress-note').textContent = `Current stage · step ${job.step.value} of ${job.step.max}. Generation can take several minutes.`; }
   else { $('step-progress').removeAttribute('value'); $('progress-note').textContent = job.status === 'queued' ? 'Your clip is waiting in the engine’s queue.' : 'The engine is working. This can take several minutes.'; }
+  if(job.status === 'unknown') { error(job.error); $('progress-note').textContent = 'New submissions are paused while the app owner checks the cloud job.'; setBusy(true); $('spinner').hidden = true; return false; }
   if(job.status === 'complete') {
     $('result-placeholder').hidden = true; $('output-video').hidden = false;
     const videoUrl = `/api/jobs/${job.id}/video`; if($('output-video').getAttribute('src') !== videoUrl) $('output-video').src = videoUrl;
@@ -78,14 +89,14 @@ function showJob(job) {
 }
 async function poll() {
   if(!jobId) return;
-  try { const response = await fetch('/api/jobs/'+jobId); if(response.status === 404 && !new URLSearchParams(location.search).has('job')) { localStorage.removeItem('bobhead-job'); jobId = null; return; } if(!response.ok) throw new Error('Could not recover this generation. Check it in ComfyUI or upload a new clip.'); const job = await response.json(); if(showJob(job)) pollTimer = setTimeout(poll,1500); }
+  try { const response = await apiFetch('/api/jobs/'+jobId); if(response.status === 404 && !new URLSearchParams(location.search).has('job')) { localStorage.removeItem('bobhead-job'); jobId = null; return; } if(!response.ok) throw new Error('Could not recover this generation. Check it in ComfyUI or upload a new clip.'); const job = await response.json(); if(showJob(job)) pollTimer = setTimeout(poll,1500); }
   catch(e) { error(e.message); setBusy(false); }
 }
 $('generate').addEventListener('click', async () => {
   if(!upload || busy) return; error(''); setBusy(true);
   $('download').hidden = true; $('output-video').hidden = true; $('output-video').pause(); $('output-video').removeAttribute('src'); $('result-placeholder').hidden = false;
   $('result-badge').textContent = 'IN THE MAKING'; $('result-caption').textContent = 'Good things take a little rendering.'; $('result-star').hidden = false;
-  try { const response = await fetch('/api/jobs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({upload_id:upload.upload_id,duration:Number($('duration').value),head_size:Number($('head-size').value),prompt:$('prompt').value})}); const job = await response.json(); if(!response.ok) throw new Error(job.error || 'Could not start generation'); jobId = job.id; localStorage.setItem('bobhead-job',jobId); showJob(job); poll(); }
+  try { const response = await apiFetch('/api/jobs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({upload_id:upload.upload_id,duration:Number($('duration').value),head_size:Number($('head-size').value),prompt:$('prompt').value})}); const job = await response.json(); if(!response.ok) throw new Error(job.error || 'Could not start generation'); jobId = job.id; localStorage.setItem('bobhead-job',jobId); showJob(job); poll(); }
   catch(e) { error(e.message); setBusy(false); }
 });
 $('how-button').addEventListener('click', () => $('info-dialog').showModal());
@@ -100,7 +111,7 @@ const gb = bytes => (bytes/1e9).toFixed(1) + ' GB';
 async function checkModels(first=false) {
   clearTimeout(modelTimer);
   try {
-    const r = await fetch('/api/models'); const state = await r.json();
+    const r = await apiFetch('/api/models'); const state = await r.json();
     $('open-models').hidden = !state.enabled;
     if(!state.enabled) return;
     if(first && !state.complete) $('models-dialog').showModal();
@@ -125,7 +136,9 @@ async function checkModels(first=false) {
   } catch(e) { $('model-error').hidden=false; $('model-error').textContent='Could not check downloads. Restart BobHead and try again.'; }
 }
 $('open-models').onclick=()=>{ $('setup-dialog').close(); $('models-dialog').showModal(); checkModels(); };
-$('download-models').onclick=async()=>{ $('download-models').disabled=true; try { const r=await fetch('/api/models/download',{method:'POST'}); const data=await r.json(); if(!r.ok) throw new Error(data.error); await checkModels(); } catch(e) { $('model-error').hidden=false; $('model-error').textContent=e.message; $('download-models').disabled=false; } };
-$('pause-models').onclick=async()=>{ await fetch('/api/models/pause',{method:'POST'}); checkModels(); };
+$('download-models').onclick=async()=>{ $('download-models').disabled=true; try { const r=await apiFetch('/api/models/download',{method:'POST'}); const data=await r.json(); if(!r.ok) throw new Error(data.error); await checkModels(); } catch(e) { $('model-error').hidden=false; $('model-error').textContent=e.message; $('download-models').disabled=false; } };
+$('pause-models').onclick=async()=>{ await apiFetch('/api/models/pause',{method:'POST'}); checkModels(); };
 $('check-models').onclick=()=>{ checkModels(); checkEngine(); };
 checkModels(true);
+
+$('cancel-job').onclick = async () => { if(!jobId) return; $('cancel-job').disabled = true; try { await apiFetch('/api/jobs/'+jobId+'/cancel',{method:'POST'}); } finally { $('cancel-job').disabled = false; } };

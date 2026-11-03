@@ -1,0 +1,12 @@
+**
+!Dockerfile.cloud
+!requirements-app.txt
+!requirements-cloud.txt
+!app/
+!app/**
+!workflows/
+!workflows/BobHead_API.json
+!environment/
+!environment/app-workflow.json
+**/__pycache__/
+**/*.pyc

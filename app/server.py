@@ -387,7 +387,22 @@ def create_app(comfy_url='http://127.0.0.1:8188', data_dir=None):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='BobHead local video studio')
     parser.add_argument('--comfy-url', default=os.environ.get('COMFY_URL', 'http://127.0.0.1:8188'))
-    parser.add_argument('--port', type=int, default=8787)
+    parser.add_argument('--port', type=int, default=int(os.environ.get('PORT', '8787')))
+    parser.add_argument('--backend', choices=['local', 'comfy-api'], default=os.environ.get('BOBHEAD_BACKEND', 'local'))
+    parser.add_argument('--host', default=os.environ.get('BOBHEAD_HOST', '127.0.0.1'))
     args = parser.parse_args()
-    print(f'BobHead: http://127.0.0.1:{args.port}  |  ComfyUI: {args.comfy_url}', flush=True)
-    web.run_app(create_app(args.comfy_url), host='127.0.0.1', port=args.port)
+    if args.backend == 'comfy-api':
+        from cloud_app import create_cloud_app
+        public_origin = os.environ.get('BOBHEAD_PUBLIC_ORIGIN') or os.environ.get('RENDER_EXTERNAL_URL', '')
+        if args.host not in ('127.0.0.1', 'localhost', '::1') and not public_origin:
+            parser.error('Public cloud hosting requires BOBHEAD_PUBLIC_ORIGIN and private demo credentials.')
+        application = create_cloud_app(data_dir=os.environ.get('BOBHEAD_DATA_DIR'),
+            public_origin=public_origin, password=os.environ.get('BOBHEAD_DEMO_PASSWORD'),
+            session_secret=os.environ.get('BOBHEAD_SESSION_SECRET'),
+            max_jobs=int(os.environ.get('BOBHEAD_MAX_JOBS_PER_DAY', '10')))
+    else:
+        if args.host not in ('127.0.0.1', 'localhost', '::1'):
+            parser.error('Local ComfyUI mode only binds to localhost. Use the protected cloud gateway for public hosting.')
+        application = create_app(args.comfy_url)
+    print(f'BobHead: http://{args.host}:{args.port} | backend: {args.backend}', flush=True)
+    web.run_app(application, host=args.host, port=args.port)

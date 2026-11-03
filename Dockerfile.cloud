@@ -1,0 +1,16 @@
+FROM python:3.12-slim
+RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg gosu \
+    && rm -rf /var/lib/apt/lists/*
+WORKDIR /srv/bobhead
+COPY requirements-app.txt requirements-cloud.txt ./
+RUN pip install --no-cache-dir -r requirements-cloud.txt \
+    && useradd --create-home --uid 10001 bobhead
+COPY --chown=bobhead:bobhead app ./app
+COPY --chown=bobhead:bobhead workflows/BobHead_API.json ./workflows/BobHead_API.json
+COPY --chown=bobhead:bobhead environment/app-workflow.json ./environment/app-workflow.json
+RUN mkdir /data && chown bobhead:bobhead /data
+RUN chmod 755 /srv/bobhead/app/cloud-entrypoint.sh
+ENTRYPOINT ["/srv/bobhead/app/cloud-entrypoint.sh"]
+ENV BOBHEAD_BACKEND=comfy-api BOBHEAD_HOST=0.0.0.0 BOBHEAD_DATA_DIR=/data PORT=8787
+EXPOSE 8787
+CMD ["python", "app/server.py"]

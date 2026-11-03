@@ -90,6 +90,10 @@ GitHub's **Source code.zip** contains project source; the release starter instal
 
 The first processed frame and enlarged OpenPose guide create the doll-style reference. The custom pose effect controls head size, while the animation follows the source movement. The final MP4 carries the original source dialogue. Optional direction edits the reference-image prompt.
 
+## Optional cloud hosting
+
+An opt-in Comfy API gateway is being prepared for a private jury demo. It keeps the same interface and runs generation on a remote GPU. See [cloud hosting setup and current limitations](CLOUD-HOSTING.md). The Linux build is ready; it still needs a paid GPU smoke test and a web host before a live link can be shared.
+
 ## Source and reproducibility
 
 - [Editable v08 workflow](workflows/BobHead_Comfyui_v08.json) and [compiled app graph](workflows/BobHead_API.json)
@@ -98,7 +102,7 @@ The first processed frame and enlarged OpenPose guide create the doll-style refe
 - [Developer setup and packaging](docs/DEVELOPMENT.md)
 - [Recorded runtime versions](environment/installed-packages.txt) and [v07 generation checks](environment/v08-validation.json)
 
-The app passes 33 automated checks covering graph compilation, prompt routing, head-size bounds, downloads and launch behavior. The exact release starter also passed a clean-folder test: checksum verification, archive joining/extraction, and the extracted Python, engine and app startup. The shared runtime with the v08 app exposes every required node type. A real v07 generation was checked for video decoding and source/result audio. Model weights are not packaged.
+The app passes 41 automated checks covering graph compilation, prompt routing, head-size bounds, downloads and launch behavior. The exact release starter also passed a clean-folder test: checksum verification, archive joining/extraction, and the extracted Python, engine and app startup. The shared runtime with the v08 app exposes every required node type. A real v07 generation was checked for video decoding and source/result audio. Model weights are not packaged.
 
 Built for the [ComfyUI open-source competition](https://comfy.org/open-source-higgsfield/).
 
