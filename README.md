@@ -22,33 +22,33 @@ Original footage on the left; BobHead on the right. These silent previews loop a
 
 ![Props: the guitar stays in the performance — before and after](docs/media/a-before-after.gif)
 
-[Before MP4](exmaples%20files/a_before.mp4) · [After MP4](exmaples%20files/a_after.mp4)
+[Before MP4](example%20files/a_before.mp4) · [After MP4](example%20files/a_after.mp4)
 
 ### Body movement: keep the moves
 
 ![Body movement: keep the moves — before and after](docs/media/b-before-after.gif)
 
-[Before MP4](exmaples%20files/b_before.mp4) · [After MP4](exmaples%20files/b_after.mp4)
+[Before MP4](example%20files/b_before.mp4) · [After MP4](example%20files/b_after.mp4)
 
 ### Facial expressions: big feelings
 
 ![Facial expressions: big feelings — before and after](docs/media/e-before-after.gif)
 
-[Before MP4](exmaples%20files/e_before.mp4) · [After MP4](exmaples%20files/e_after.mp4)
+[Before MP4](example%20files/e_before.mp4) · [After MP4](example%20files/e_after.mp4)
 
 ### Accessories: hat and glasses
 
 ![Accessories: hat and glasses — before and after](docs/media/d-before-after.gif)
 
-[Before MP4](exmaples%20files/d_before.mp4) · [After MP4](exmaples%20files/d_after.mp4)
+[Before MP4](example%20files/d_before.mp4) · [After MP4](example%20files/d_after.mp4)
 
 ### The BobHead transformation
 
 ![The BobHead transformation — before and after](docs/media/c-before-after.gif)
 
-[Before MP4](exmaples%20files/c_before.mp4) · [After MP4](exmaples%20files/c_after.mp4)
+[Before MP4](example%20files/c_before.mp4) · [After MP4](example%20files/c_after.mp4)
 
-**[Download the Windows app](https://github.com/jalrobustvfx/BobHead/releases/latest)** · **[Download before and after example files](exmaples%20files)** · **[Watch the tutorial on YouTube](https://youtu.be/cc84p_qUgdo)**
+**[Download the Windows app](https://github.com/jalrobustvfx/BobHead/releases/latest)** · **[Download before and after example files](example%20files)** · **[Watch the tutorial on YouTube](https://youtu.be/cc84p_qUgdo)**
 
 The tutorial covers downloading BobHead, model setup, uploading your clip, generating, and saving the result. [Download the walkthrough MP4](docs/media/how-to-use-me.mp4).
 
@@ -62,7 +62,11 @@ Download this repository using **Code → Download ZIP**, or clone it. Follow th
 
 The starter instructions below install the older v06 package.
 
-**[Example files: before.mp4 and after.mp4](exmaples%20files)** — download the source footage to test BobHead and compare it with the enlarged-head result.
+**[Watch the step-by-step download, launch and use guide (1:56)](docs/media/download-launch-use.mp4)** — bold captions and sound effects, showing the available v0.6.0 Windows package.
+
+[![Download and launch BobHead walkthrough](docs/screenshots/install-explainer.jpg)](docs/media/download-launch-use.mp4)
+
+**[Example files: before.mp4 and after.mp4](example%20files)** — download the source footage to test BobHead and compare it with the enlarged-head result.
 
 **Jury test clip: [Download the original talking video with audio (MP4, 1.1 MB)](https://raw.githubusercontent.com/jalrobustvfx/BobHead/main/docs/media/before.mp4).** This is the supplied `Me01.mp4`, stored here as `before.mp4`. Save the video to your computer, upload it in BobHead, choose **5 seconds**, and click **Make me a bobhead**. Compare your output with the [included result](docs/media/after.mp4).
 
@@ -83,7 +87,7 @@ See the [illustrated quick start and troubleshooting guide](docs/QUICKSTART.md).
 
 | Original talking clip | Generated BobHead |
 | --- | --- |
-| [Download before.mp4](exmaples%20files/before.mp4) | [Download after.mp4](exmaples%20files/after.mp4) |
+| [Download before.mp4](example%20files/before.mp4) | [Download after.mp4](example%20files/after.mp4) |
 
 The source is the creator's own `Me01.mp4`. Upload `before.mp4` in BobHead and choose **5 seconds**. The result uses the original source audio.
 

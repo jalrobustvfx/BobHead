@@ -1,5 +1,7 @@
 # BobHead quick start
 
+**[Watch the 1:56 step-by-step installation and usage video](media/download-launch-use.mp4)** — text and SFX only; follows the v0.6.0 Windows package.
+
 > **Version note:** This packaged-install guide describes Windows release v0.6.0. The latest v07 app has a redesigned interface, a 1.2×–2.0× head-size slider, and 15 main models (about 118.9 GB). Use the [current source setup](DEVELOPMENT.md) for v07.
 
 For step-by-step directions on downloading from GitHub, start with the **[installation guide](../INSTALL.md)**.
@@ -32,7 +34,7 @@ Choose the duration, optionally enter a description, and click **Make me a bobhe
 
 Play the result with sound and click the download button to save the MP4. The output includes the original dialogue.
 
-[Watch the tutorial on YouTube](https://youtu.be/cc84p_qUgdo) · [Download the walkthrough MP4](media/how-to-use-me.mp4) · [See the before/after comparison](media/before-after.mp4) · [Download example files](../exmaples%20files)
+[Watch the tutorial on YouTube](https://youtu.be/cc84p_qUgdo) · [Download the walkthrough MP4](media/how-to-use-me.mp4) · [See the before/after comparison](media/before-after.mp4) · [Download example files](../example%20files)
 
 The narrated walkthrough uses the creator's own footage and shows the GitHub starter download, included files, model setup, upload, generation, and saving. Installation and generation waits are skipped.
 
