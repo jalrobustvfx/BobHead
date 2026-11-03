@@ -5,49 +5,90 @@ function Get-BobHeadHash([string]$path) {
     try { return [BitConverter]::ToString($sha.ComputeHash($stream)).Replace('-', '').ToLowerInvariant() }
     finally { $stream.Dispose(); $sha.Dispose() }
 }
+function Show-BobHeadDownloadProgress([long]$received, [long]$completedBytes, [long]$totalBytes, [double]$speed, [string]$state) {
+    $done = $completedBytes + $received
+    $fraction = [Math]::Min(1.0, $done / [double]$totalBytes)
+    $filled = [int][Math]::Floor($fraction * 20)
+    $bar = ('#' * $filled) + ('-' * (20 - $filled))
+    $line = '[{0}] {1,5:N1}% {2:N0}/{3:N0} MiB {4:N1} MiB/s {5}' -f $bar, ($fraction * 100), ($done / 1MB), ($totalBytes / 1MB), $speed, $state
+    [Console]::Write("`r" + $line.PadRight(95))
+}
 function Save-BobHeadDownload([string]$url, [string]$destination, [long]$expectedBytes,
-    [long]$completedBytes, [long]$totalBytes) {
-    $request = [Net.HttpWebRequest]::Create($url)
-    $request.UserAgent = 'BobHead-Setup-v07'
-    $request.Timeout = 60000
-    $request.ReadWriteTimeout = 120000
-    $response = $null
-    $inputStream = $null
-    $outputStream = $null
-    $received = [long]0
-    $timer = [Diagnostics.Stopwatch]::StartNew()
-    $lastUpdate = -1.0
-    try {
-        $response = $request.GetResponse()
-        $inputStream = $response.GetResponseStream()
-        $outputStream = [IO.File]::Create($destination)
-        $buffer = New-Object byte[] 65536
-        do {
-            $count = $inputStream.Read($buffer, 0, $buffer.Length)
-            if ($count -gt 0) {
-                $received += $count
-                if ($received -gt $expectedBytes) { throw 'Download is larger than expected.' }
-                $outputStream.Write($buffer, 0, $count)
+    [long]$completedBytes, [long]$totalBytes, [int]$idleTimeoutSeconds = 30,
+    [int]$retryDelaySeconds = 3, [int]$maxAttempts = 5) {
+    for ($attempt = 1; $attempt -le $maxAttempts; $attempt++) {
+        $received = [long]0
+        if (Test-Path -LiteralPath $destination) { $received = (Get-Item -LiteralPath $destination).Length }
+        if ($received -eq $expectedBytes) { return } # Caller verifies SHA256 before installation.
+        if ($received -gt $expectedBytes) { $received = 0 }
+        $offset = $received
+        $request = [Net.HttpWebRequest]::Create($url)
+        $request.UserAgent = 'BobHead-Setup-v07'
+        $request.CachePolicy = New-Object Net.Cache.RequestCachePolicy([Net.Cache.RequestCacheLevel]::NoCacheNoStore)
+        $request.Timeout = 30000
+        $request.ReadWriteTimeout = 30000
+        if ($offset -gt 0) { $request.AddRange($offset); Write-Host ('Resuming at ' + [Math]::Round($offset / 1MB, 1) + ' MiB...') }
+        $response = $null; $inputStream = $null; $outputStream = $null
+        $retryable = $true
+        $timer = [Diagnostics.Stopwatch]::StartNew()
+        $lastUpdate = -1.0
+        try {
+            $response = $request.GetResponse()
+            if ([int]$response.StatusCode -eq 206) {
+                $range = $response.Headers['Content-Range']
+                if ($range -notmatch ('^bytes ' + $offset + '-\d+/' + $expectedBytes + '$')) {
+                    $retryable = $false; throw 'The server returned an incorrect download range.'
+                }
+                $mode = [IO.FileMode]::Append
+            } else {
+                # A server ignoring Range must restart, never append a full response.
+                $received = 0; $offset = 0; $mode = [IO.FileMode]::Create
             }
-            $seconds = $timer.Elapsed.TotalSeconds
-            if (($seconds - $lastUpdate -ge 0.2) -or ($count -eq 0)) {
-                $done = $completedBytes + $received
-                $fraction = [Math]::Min(1.0, $done / [double]$totalBytes)
-                $filled = [int][Math]::Floor($fraction * 20)
-                $bar = ('#' * $filled) + ('-' * (20 - $filled))
-                $speed = $received / 1MB / [Math]::Max(0.01, $seconds)
-                $line = '[{0}] {1,5:N1}%  {2:N0}/{3:N0} MiB  {4:N1} MiB/s' -f $bar, ($fraction * 100), ($done / 1MB), ($totalBytes / 1MB), $speed
-                [Console]::Write("`r" + $line + '    ')
-                $lastUpdate = $seconds
+            $inputStream = $response.GetResponseStream()
+            $outputStream = [IO.File]::Open($destination, $mode, [IO.FileAccess]::Write, [IO.FileShare]::Read)
+            $buffer = New-Object byte[] 65536
+            do {
+                $idle = [Diagnostics.Stopwatch]::StartNew()
+                $pending = $inputStream.ReadAsync($buffer, 0, $buffer.Length)
+                while (-not $pending.Wait(250)) {
+                    Show-BobHeadDownloadProgress $received $completedBytes $totalBytes 0 ('Waiting ' + [int]$idle.Elapsed.TotalSeconds + 's...')
+                    if ($idle.Elapsed.TotalSeconds -ge $idleTimeoutSeconds) {
+                        $request.Abort(); throw 'No download data received; reconnecting.'
+                    }
+                }
+                $count = $pending.GetAwaiter().GetResult()
+                if ($count -gt 0) {
+                    $received += $count
+                    if ($received -gt $expectedBytes) { $retryable = $false; throw 'Download is larger than expected.' }
+                    $outputStream.Write($buffer, 0, $count)
+                }
+                $seconds = $timer.Elapsed.TotalSeconds
+                if (($seconds - $lastUpdate -ge 0.2) -or ($count -eq 0)) {
+                    $speed = ($received - $offset) / 1MB / [Math]::Max(0.01, $seconds)
+                    Show-BobHeadDownloadProgress $received $completedBytes $totalBytes $speed ''
+                    $lastUpdate = $seconds
+                }
+            } while ($count -gt 0)
+            if ($received -ne $expectedBytes) { throw 'The connection ended before the file finished.' }
+            return
+        } catch {
+            $message = $_.Exception.Message
+            $errorResponse = $_.Exception.Response
+            if ($errorResponse -and ([int]$errorResponse.StatusCode -in @(401,404))) { $retryable = $false }
+            if ((-not $retryable) -or ($attempt -eq $maxAttempts)) {
+                throw ('Download stopped: ' + $message + ' Your partial download is saved. Run this starter again to resume.')
             }
-        } while ($count -gt 0)
-    } finally {
-        if ($outputStream) { $outputStream.Dispose() }
-        if ($inputStream) { $inputStream.Dispose() }
-        if ($response) { $response.Dispose() }
-        [Console]::WriteLine()
+        } finally {
+            if ($outputStream) { $outputStream.Dispose() }
+            if ($inputStream) { $inputStream.Dispose() }
+            if ($response) { $response.Dispose() }
+            [Console]::WriteLine()
+        }
+        Write-Host ('Connection interrupted. Reconnecting (' + $attempt + '/' + $maxAttempts + ')...')
+        if ($retryDelaySeconds -gt 0) { Start-Sleep -Seconds ([Math]::Min(15, $retryDelaySeconds * $attempt)) }
     }
 }
+
 $manifest = ConvertFrom-Json @'
 __MANIFEST_JSON__
 '@
@@ -86,6 +127,7 @@ foreach ($part in $manifest.parts) {
     Write-Host 'Checking downloaded file...'
     if (((Get-Item -LiteralPath $partial).Length -ne $part.bytes) -or
         ((Get-BobHeadHash $partial) -ne $part.sha256)) {
+        [IO.File]::Delete($partial) # A corrupt generated download cannot be resumed safely.
         throw ('Download verification failed: ' + $part.name + '. Run this starter again to retry.')
     }
     # These paths are fixed filenames inside the starter's own download directory.

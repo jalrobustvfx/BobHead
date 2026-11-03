@@ -10,7 +10,7 @@ Windows 10/11 and an NVIDIA CUDA GPU with a compatible driver are required. Allo
 
 ## 2. Launch
 
-Double-click **Start-BobHead.cmd**. Its live progress bar shows the overall percentage, downloaded MiB and speed. Keep its window open while it downloads, verifies and extracts `BobHead-Standalone-v07`. The app opens in your browser automatically. Python, ComfyUI and the required custom nodes are included; no separate installation or folder picker is needed.
+Double-click **Start-BobHead.cmd**. Its live progress bar shows the overall percentage, downloaded MiB and speed. If data stops arriving, it shows a waiting message, then reconnects automatically (up to five attempts), preserving the partial download. Keep its window open while it downloads, verifies and extracts `BobHead-Standalone-v07`. The app opens in your browser automatically. Python, ComfyUI and the required custom nodes are included; no separate installation or folder picker is needed.
 
 If you previously installed v06, put the new v07 starter in a new folder. The old starter is pinned to the old package. For a fresh launch later, reuse the new starter or open **Launch BobHead.cmd** inside the v07 folder.
 
@@ -40,7 +40,7 @@ Keep the installation folder together. Completed setup is reused on later launch
 
 - **The interface looks old:** get the new starter from the latest release and install it in a new folder. The old v06 starter stays pinned to v06.
 - **Models are missing:** reopen model setup and wait for all 15 files to show Installed.
-- **A runtime download stops:** run the same starter again; verified complete parts are reused.
+- **A runtime download stops:** run the same starter again; verified complete parts are reused and partial runtime files resume where they stopped.
 - **The engine does not start:** check the startup logs under the app's `.data/logs` folder and confirm your NVIDIA driver is compatible.
 
 The exact starter passed a clean-folder installation test on this computer, including checksum verification, extraction and startup of the freshly extracted app and engine. A separate-machine installation and the complete fresh model download have not been rerun.
