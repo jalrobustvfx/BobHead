@@ -56,15 +56,17 @@ Built for the [ComfyUI open-source competition](https://comfy.org/open-source-hi
 
 ## Run the latest app (v07)
 
+**[Watch the narrated v07 setup and usage guide (1:56)](docs/media/download-launch-use.mp4)** — the new interface, source download and launch, model requirements, head-size slider, and saving results. Voiceover: Archie, generated with Higgsfield.
+
+[![New BobHead interface and head-size slider](docs/screenshots/v07-voiced-guide.jpg)](docs/media/download-launch-use.mp4)
+
 Download this repository using **Code → Download ZIP**, or clone it. Follow the [developer setup](docs/DEVELOPMENT.md) to connect the app to a working ComfyUI installation with the [v07 models](MODELS.md) and [required nodes](NODE_SETUP.md). The current app includes the redesigned interface and the **1.2×–2.0× head-size slider**.
 
 ## Packaged Windows app (v0.6.0)
 
 The starter instructions below install the older v06 package.
 
-**[Watch the step-by-step download, launch and use guide (1:56)](docs/media/download-launch-use.mp4)** — bold captions and sound effects, showing the available v0.6.0 Windows package.
 
-[![Download and launch BobHead walkthrough](docs/screenshots/install-explainer.jpg)](docs/media/download-launch-use.mp4)
 
 **[Example files: before.mp4 and after.mp4](example%20files)** — download the source footage to test BobHead and compare it with the enlarged-head result.
 

@@ -1,6 +1,6 @@
 # Download and install BobHead
 
-**[Watch the 1:56 step-by-step installation and usage video](docs/media/download-launch-use.mp4)** — text and SFX only; follows the v0.6.0 Windows package.
+**[Watch the 1:56 narrated v07 source setup and usage video](docs/media/download-launch-use.mp4)** — new interface and Higgsfield voiceover; follows v07 source setup with an existing ComfyUI installation.
 
 > **Version note:** This packaged-install guide describes Windows release v0.6.0. The latest v07 app has a redesigned interface, a 1.2×–2.0× head-size slider, and 15 main models (about 118.9 GB). Use the [current source setup](docs/DEVELOPMENT.md) for v07.
 

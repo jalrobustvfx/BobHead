@@ -1,0 +1,13 @@
+Let's get the latest BobHead running. This is the new interface, with the head-size slider. On GitHub, choose Code, then Download ZIP. Extract it, and open the BobHead folder. This walkthrough uses the version seven source app.
+
+Before launching, you'll need a working ComfyUI setup. Follow Node Setup for the required custom nodes, and Models for the download locations. Version seven needs fifteen main model files, about a hundred and nineteen gigabytes. The three Qwen files are included in that list.
+
+Open the version seven workflow in ComfyUI and check that it runs. Keep ComfyUI running on port eighty-one eighty-eight. Then open a terminal inside the BobHead folder. Run the two commands shown here, using your Python environment. Open the local address in your browser.
+
+Now let's make something. In the repository, open example files. Pick a file ending in before, and use Download raw file. Back in BobHead, click the upload panel, or drop the video straight into it.
+
+Start with a short clip. Five seconds is a good first test. Use the head-size slider to choose your look, from one point two to two times. Big mood is the default. Your choice applies to the next generation.
+
+Click Make me a bobhead. The first frame guides the character's appearance, and the video guides the movement. Leave the app and ComfyUI running while it finishes. This can take several minutes. We're skipping that wait here.
+
+When the result is ready, play it back and check it. Click Download MP4 to save your video. Want another? Hit Replace and choose your next clip. Same moves, same dialogue, a much bigger character.

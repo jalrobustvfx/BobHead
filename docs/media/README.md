@@ -12,6 +12,8 @@ The old `me-before-after.gif` preview has been removed. `before.mp4` and `after.
 
 These files were supplied by the creator for this demonstration. Media is separate from the software MIT license; no general redistribution license for footage is granted here.
 
-## Step-by-step installation guide
+## Step-by-step v07 guide
 
-`download-launch-use.mp4` is a 1 minute 56 second, 1280×720 walkthrough of the available v0.6.0 Windows package: starter download, launch, model installation, sample download, upload, generation and saving. It uses guided captures and instructional cards with bold captions and transition SFX only. Setup/rendering waits are omitted. It labels v07 as a separate source-code setup.
+`download-launch-use.mp4` is the revised 1:56 narrated walkthrough. It uses only the new v07 interface, with voiceover generated through Higgsfield using the Archie preset voice. It covers source ZIP download, required ComfyUI nodes and 15 main models, launch commands, example clip download, upload, clip duration, the 1.2×–2.0× head-size slider, generation and saving. It includes actual v07 output and quiet transition SFX, with no background music. Setup and generation waits are omitted. `v07-guide-transcript.txt` contains the spoken script.
+
+This replaces the previous silent tutorial of the v0.6.0 package. The downloadable Windows package is still v0.6.0; this guide requires a prepared ComfyUI installation and the v07 source app.
