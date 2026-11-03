@@ -1,0 +1,16 @@
+{
+  "status": "passed",
+  "workflow": "v07",
+  "startup": "bundled app 8790 and engine 8190 reachable",
+  "required_node_classes": "all available",
+  "head_size": {
+    "min": 1.2,
+    "max": 2.0,
+    "default": 1.7
+  },
+  "tests": "21 passed",
+  "models_included": false,
+  "expected_missing_main_models": 15,
+  "fresh_model_download": "not rerun",
+  "separate_machine_install": "not tested"
+}

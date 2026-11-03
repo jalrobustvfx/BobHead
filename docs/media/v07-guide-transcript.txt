@@ -1,8 +1,8 @@
-Let's get the latest BobHead running. This is the new interface, with the head-size slider. On GitHub, choose Code, then Download ZIP. Extract it, and open the BobHead folder. This walkthrough uses the version seven source app.
+Here's how to download and use the latest BobHead. Open the GitHub repository and go to Releases. Under Assets, download Start-BobHead dot C M D. That's the only file you need to download yourself.
 
-Before launching, you'll need a working ComfyUI setup. Follow Node Setup for the required custom nodes, and Models for the download locations. Version seven needs fifteen main model files, about a hundred and nineteen gigabytes. The three Qwen files are included in that list.
+Put the starter in an empty folder on the drive where you want BobHead installed. Double-click it, and keep its window open. It downloads the app, checks the files, and launches the new interface. Python, ComfyUI and the custom nodes are included.
 
-Open the version seven workflow in ComfyUI and check that it runs. Keep ComfyUI running on port eighty-one eighty-eight. Then open a terminal inside the BobHead folder. Run the two commands shown here, using your Python environment. Open the local address in your browser.
+On your first launch, click Download required models. There are fifteen main files, about a hundred and nineteen gigabytes, so allow plenty of space. You can pause and resume. Once every model says Installed, close setup. Supporting models may download during your first generation.
 
 Now let's make something. In the repository, open example files. Pick a file ending in before, and use Download raw file. Back in BobHead, click the upload panel, or drop the video straight into it.
 

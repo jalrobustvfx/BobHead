@@ -1,6 +1,6 @@
 # Developer setup
 
-The current source app uses v07 and the redesigned interface. Connect it to an existing, working ComfyUI server. The downloadable v0.6.0 standalone release is the older v06 app.
+The current source app uses v07 and the redesigned interface. Connect it to an existing, working ComfyUI server. The latest v0.7.0 Windows standalone release includes the same workflow and interface, with its own Python, ComfyUI and custom nodes.
 
 ## Use an existing ComfyUI
 

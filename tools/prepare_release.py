@@ -78,6 +78,6 @@ if __name__ == '__main__':
     parser.add_argument('--archive', type=Path, required=True)
     parser.add_argument('--destination', type=Path, required=True)
     parser.add_argument('--repository', required=True)
-    parser.add_argument('--tag', default='v0.6.0')
+    parser.add_argument('--tag', default='v0.7.0')
     args = parser.parse_args()
     prepare(args.archive, args.destination, args.repository, args.tag)

@@ -14,6 +14,6 @@ These files were supplied by the creator for this demonstration. Media is separa
 
 ## Step-by-step v07 guide
 
-`download-launch-use.mp4` is the revised 1:56 narrated walkthrough. It uses only the new v07 interface, with voiceover generated through Higgsfield using the Archie preset voice. It covers source ZIP download, required ComfyUI nodes and 15 main models, launch commands, example clip download, upload, clip duration, the 1.2×–2.0× head-size slider, generation and saving. It includes actual v07 output and quiet transition SFX, with no background music. Setup and generation waits are omitted. `v07-guide-transcript.txt` contains the spoken script.
+`download-launch-use.mp4` is the revised 1:56 narrated walkthrough. It uses only the new v07 interface, with voiceover generated through Higgsfield using the Archie preset voice. It covers the Start-BobHead.cmd download, automatic bundled installation, 15-model setup, example clip download, upload, clip duration, the 1.2×–2.0× head-size slider, generation and saving. It includes actual v07 output and quiet transition SFX, with no background music. Setup and generation waits are omitted. `v07-guide-transcript.txt` contains the spoken script.
 
-This replaces the previous silent tutorial of the v0.6.0 package. The downloadable Windows package is still v0.6.0; this guide requires a prepared ComfyUI installation and the v07 source app.
+This is the current v0.7.0 Windows package walkthrough. Python, ComfyUI and custom nodes are bundled; the starter downloads, verifies, extracts and launches the app. Models download separately inside the app.

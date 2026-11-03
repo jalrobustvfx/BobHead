@@ -25,4 +25,4 @@ These additional models require about 17.3 GB. Model weights are not included in
 
 [BobHead_Comfyui_v07_API_source.json](BobHead_Comfyui_v07_API_source.json) is the flattened API graph for integration, with the disabled prompt-enhancer branch pruned. It is not the editable canvas file. API users must supply their own uploaded input filename and output prefix.
 
-The source app now uses v07 by default, with a redesigned interface and a head-size slider from 1.2× to 2.0×. See the [source setup guide](../docs/DEVELOPMENT.md). The downloadable v0.6.0 Windows release and older walkthrough still describe v06.
+The source app now uses v07 by default, with a redesigned interface and a head-size slider from 1.2× to 2.0×. See the [source setup guide](../docs/DEVELOPMENT.md). The v0.7.0 Windows release bundles this workflow and the new interface; use its Start-BobHead.cmd for automatic setup.

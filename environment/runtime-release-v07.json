@@ -1,0 +1,28 @@
+{
+  "archive": "BobHead-Standalone-v07.zip",
+  "folder": "BobHead-Standalone-v07",
+  "bytes": 3411983646,
+  "sha256": "9aec987a468262a60eb649a75a12ba46904dacc814a7dce6da43a4ed9a5c2f10",
+  "models_included": false,
+  "parts": [
+    {
+      "name": "BobHead-Standalone-v07.zip.part01",
+      "bytes": 1879048192,
+      "sha256": "24cd384941d3f7920f5674defb8adda53dee045c1da1cb89dad18a23e3e16f05"
+    },
+    {
+      "name": "BobHead-Standalone-v07.zip.part02",
+      "bytes": 1532935454,
+      "sha256": "c51845c95ce4b8795df70a2b9bd213abe2124e8c3d581f6b0630a14c46afba6b"
+    }
+  ],
+  "tag": "v0.7.0",
+  "main_models": 15,
+  "main_model_bytes": 118918295544,
+  "workflow": "BobHead_Comfyui_v07.json",
+  "head_size": {
+    "min": 1.2,
+    "max": 2.0,
+    "default": 1.7
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "status": "passed",
+  "starter": "exact generated Start-BobHead.cmd",
+  "fresh_folder_with_spaces": true,
+  "part_checksums": "verified by starter",
+  "archive_join_and_checksum": "passed",
+  "extraction": "passed",
+  "new_embedded_python": "passed",
+  "new_engine_and_app_startup": "passed on 8194/8794",
+  "workflow": "v07",
+  "head_size": {
+    "min": 1.2,
+    "max": 2.0,
+    "default": 1.7
+  },
+  "expected_missing_models": 15,
+  "fresh_model_download": "not rerun",
+  "separate_machine": "not tested"
+}

@@ -18,26 +18,26 @@ function Get-BobHeadHash([string]$path) {
 }
 $manifest = ConvertFrom-Json @'
 {
-  "archive": "BobHead-Standalone-v06.zip",
-  "folder": "BobHead-Standalone-v06",
-  "bytes": 3345284431,
-  "sha256": "08dfc6523bc0eac63a752013b332eb5b6b37683d4c759bf8082cf06be2ec6a57",
+  "archive": "BobHead-Standalone-v07.zip",
+  "folder": "BobHead-Standalone-v07",
+  "bytes": 3411983646,
+  "sha256": "9aec987a468262a60eb649a75a12ba46904dacc814a7dce6da43a4ed9a5c2f10",
   "models_included": false,
   "parts": [
     {
-      "name": "BobHead-Standalone-v06.zip.part01",
+      "name": "BobHead-Standalone-v07.zip.part01",
       "bytes": 1879048192,
-      "sha256": "d9948178ee2fc73af064362ed49b84d2db958e1a42741c3487eb3129ec72d98a"
+      "sha256": "24cd384941d3f7920f5674defb8adda53dee045c1da1cb89dad18a23e3e16f05"
     },
     {
-      "name": "BobHead-Standalone-v06.zip.part02",
-      "bytes": 1466236239,
-      "sha256": "6dae0f0310c8910c6fd4bb446f6d07114f95bbbc7d14c22052369f127ef0b075"
+      "name": "BobHead-Standalone-v07.zip.part02",
+      "bytes": 1532935454,
+      "sha256": "c51845c95ce4b8795df70a2b9bd213abe2124e8c3d581f6b0630a14c46afba6b"
     }
   ]
 }
 '@
-$baseUrl = 'https://github.com/jalrobustvfx/BobHead/releases/download/v0.6.0'
+$baseUrl = 'https://github.com/jalrobustvfx/BobHead/releases/download/v0.7.0'
 $installParent = Split-Path -Parent $env:BOBHEAD_BOOTSTRAP
 $cache = Join-Path $installParent 'BobHead-downloads'
 $appRoot = Join-Path $installParent $manifest.folder
@@ -69,7 +69,7 @@ foreach ($part in $manifest.parts) {
     Write-Host ('Downloading ' + $part.name + ' (' + [Math]::Round($part.bytes / 1GB, 2) + ' GiB)...')
     $client = New-Object Net.WebClient
     try {
-        $client.Headers.Add('User-Agent', 'BobHead-Setup-v06')
+        $client.Headers.Add('User-Agent', 'BobHead-Setup-v07')
         $client.DownloadFile($baseUrl + '/' + $part.name, $partial)
     } finally { $client.Dispose() }
     if (((Get-Item -LiteralPath $partial).Length -ne $part.bytes) -or

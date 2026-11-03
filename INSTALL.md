@@ -1,64 +1,50 @@
-# Download and install BobHead
+# Download and install BobHead v0.7.0
 
-**[Watch the 1:56 narrated v07 source setup and usage video](docs/media/download-launch-use.mp4)** — new interface and Higgsfield voiceover; follows v07 source setup with an existing ComfyUI installation.
+**[Watch the 1:56 narrated walkthrough](docs/media/download-launch-use.mp4)** — the new interface, one-file installation, model setup and first video.
 
-> **Version note:** This packaged-install guide describes Windows release v0.6.0. The latest v07 app has a redesigned interface, a 1.2×–2.0× head-size slider, and 15 main models (about 118.9 GB). Use the [current source setup](docs/DEVELOPMENT.md) for v07.
+## 1. Get the starter
 
-You can install BobHead by downloading and running one starter file. Python, ComfyUI, and the required custom nodes are included; you do not need to install them separately.
+Open the [latest Windows release](https://github.com/jalrobustvfx/BobHead/releases/latest). Under **Assets**, download **Start-BobHead.cmd** into a new, empty folder on the drive where you want to install BobHead. The starter downloads the large `.part` files automatically; you only download the starter yourself.
 
-## Before you start
+Windows 10/11 and an NVIDIA CUDA GPU with a compatible driver are required. Allow room for the runtime, about **118.9 GB of main models**, supporting downloads and output files. The validated GPU has 96 GiB VRAM; the minimum has not been established.
 
-- Use Windows 10 or 11 with an NVIDIA CUDA GPU and a compatible driver.
-- Choose a drive with plenty of free space. The model downloads alone total about **102 GB**, with additional space needed for the app, supporting models, and generated videos.
-- Keep Internet access available during setup and the first generation.
+## 2. Launch
 
-The demonstrated setup uses an RTX PRO 6000 Blackwell with 96 GiB VRAM. Minimum VRAM has not been established, and installation on a separate computer has not yet been validated.
+Double-click **Start-BobHead.cmd**. Keep its window open while it downloads, verifies and extracts `BobHead-Standalone-v07`. The app opens in your browser automatically. Python, ComfyUI and the required custom nodes are included; no separate installation or folder picker is needed.
 
-## 1. Download the starter from GitHub
+If you previously installed v06, put the new v07 starter in a new folder. The old starter is pinned to the old package. For a fresh launch later, reuse the new starter or open **Launch BobHead.cmd** inside the v07 folder.
 
-1. Open the **[BobHead Releases page](https://github.com/jalrobustvfx/BobHead/releases/latest)**.
-2. Scroll down to **Assets**. If the file list is collapsed, click **Assets** to expand it.
-3. Click **Start-BobHead.cmd** to download it.
-4. Create an empty folder on the drive where you want BobHead installed, then move the downloaded starter into that folder.
+## 3. Download models once
 
-You only need to download **Start-BobHead.cmd** yourself. It automatically downloads the two large runtime parts, joins them, checks their integrity, and extracts the app. Leave the `.part` files and checksum files on the release page for the starter to handle.
+Click **Download required models** in the app. All **15 main files** must show **Installed**. The total is approximately **118.9 GB**, including the three Qwen Image 2.1 files. Downloads can pause and resume. Keep Internet access available for supporting models that may download during the first generation. Then close setup.
 
-## 2. Install and launch
+Model weights are downloaded directly from their publishers; they are not included in the app download. See the [model list](MODELS.md).
 
-Double-click **Start-BobHead.cmd** in your chosen folder. Keep its window open while it downloads and extracts the app. BobHead opens in your browser when ready.
+## 4. Choose a source clip
 
-The starter uses the bundled ComfyUI installation automatically. You do not need to select a ComfyUI folder.
+Open [example files](https://github.com/jalrobustvfx/BobHead/tree/main/example%20files) in the repository. Choose a file ending in `_before.mp4`, then click **Download raw file**. The corresponding `_after.mp4` is the supplied result for comparison.
 
-## 3. Download the models
+In the app, click the upload panel or drag in your clip. Use footage you have permission to share.
 
-On the first launch, click **Download required models** in the app. The 12 main model files total approximately **101.6 GB**. Model weights are downloaded separately from their publishers to keep the app download smaller.
+## 5. Choose the effect
 
-Wait until all 12 models show **Installed**. You can pause and resume the model downloads. Supporting caption, segmentation, and pose models may download during the first generation, so keep Internet access available until it finishes.
+Start with a **5-second** clip. Set **Head size** between **1.2× and 2.0×**; the default is **1.7× / Big mood**. The choice applies to the next generation. Optional direction changes the doll reference prompt.
 
-## 4. Make your first video
+## 6. Generate and save
 
-1. **[Download the example source video with dialogue (MP4, 1.1 MB)](https://raw.githubusercontent.com/jalrobustvfx/BobHead/main/docs/media/before.mp4)**. If it opens in your browser, use the video's download menu or right-click and choose **Save video as**. This is `Me01.mp4`, stored in the repository as `before.mp4`.
-2. Upload the saved video in BobHead.
-3. Choose **5 seconds** for the example clip.
-4. Click **Make me a bobhead** and wait for generation to finish.
-5. Preview the result with sound, then click **Download MP4**. You can compare it with the [included example result](docs/media/after.mp4).
+Click **Make me a bobhead**. Leave the app and engine running. Generation can take several minutes, depending on your GPU and clip. When the result is ready, play it back and click **Download MP4**. Use **Replace** for another clip.
 
-Head size is fixed by the workflow, and the original dialogue is carried into the output.
+Keep the installation folder together. Completed setup is reused on later launches.
 
-## Launch again later
+## Troubleshooting
 
-Keep the installation folder together. Run the same **Start-BobHead.cmd** again, or open **Launch BobHead.cmd** inside the extracted `BobHead-Standalone-v06` folder. Completed setup is reused.
+- **The interface looks old:** get the new starter from the latest release and install it in a new folder. The old v06 starter stays pinned to v06.
+- **Models are missing:** reopen model setup and wait for all 15 files to show Installed.
+- **A runtime download stops:** run the same starter again; verified complete parts are reused.
+- **The engine does not start:** check the startup logs under the app's `.data/logs` folder and confirm your NVIDIA driver is compatible.
 
-If a runtime download is interrupted, run the starter again. Verified completed parts are reused; an incomplete runtime part downloads again.
+The exact starter passed a clean-folder installation test on this computer, including checksum verification, extraction and startup of the freshly extracted app and engine. A separate-machine installation and the complete fresh model download have not been rerun.
 
-## Downloading just the source code
+## Source code
 
-For the project source, open the **[repository](https://github.com/jalrobustvfx/BobHead)** and choose **Code → Download ZIP**. Developers can also clone it with Git:
-
-```sh
-git clone https://github.com/jalrobustvfx/BobHead.git
-```
-
-The source download includes the app code, workflow, custom pose node, documentation, and examples. It does not include the bundled Python/ComfyUI runtime or model weights. To run the complete Windows app, use the release starter above. For source setup, see the **[developer guide](docs/DEVELOPMENT.md)**.
-
-**[Watch the tutorial on YouTube](https://youtu.be/cc84p_qUgdo)** · **[Download the walkthrough MP4](docs/media/how-to-use-me.mp4)** · **[Illustrated quick start and troubleshooting](docs/QUICKSTART.md)** · **[Model links and folders](MODELS.md)**
+**Code → Download ZIP** contains source only. To use your own ComfyUI, follow the [developer guide](docs/DEVELOPMENT.md). For the self-contained Windows app, use **Start-BobHead.cmd** above.

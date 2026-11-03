@@ -40,7 +40,7 @@ foreach ($part in $manifest.parts) {
     Write-Host ('Downloading ' + $part.name + ' (' + [Math]::Round($part.bytes / 1GB, 2) + ' GiB)...')
     $client = New-Object Net.WebClient
     try {
-        $client.Headers.Add('User-Agent', 'BobHead-Setup-v06')
+        $client.Headers.Add('User-Agent', 'BobHead-Setup-v07')
         $client.DownloadFile($baseUrl + '/' + $part.name, $partial)
     } finally { $client.Dispose() }
     if (((Get-Item -LiteralPath $partial).Length -ne $part.bytes) -or
