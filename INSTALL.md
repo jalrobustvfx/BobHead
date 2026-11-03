@@ -10,7 +10,7 @@ Windows 10/11 and an NVIDIA CUDA GPU with a compatible driver are required. Allo
 
 ## 2. Launch
 
-Double-click **Start-BobHead.cmd**. Keep its window open while it downloads, verifies and extracts `BobHead-Standalone-v07`. The app opens in your browser automatically. Python, ComfyUI and the required custom nodes are included; no separate installation or folder picker is needed.
+Double-click **Start-BobHead.cmd**. Its live progress bar shows the overall percentage, downloaded MiB and speed. Keep its window open while it downloads, verifies and extracts `BobHead-Standalone-v07`. The app opens in your browser automatically. Python, ComfyUI and the required custom nodes are included; no separate installation or folder picker is needed.
 
 If you previously installed v06, put the new v07 starter in a new folder. The old starter is pinned to the old package. For a fresh launch later, reuse the new starter or open **Launch BobHead.cmd** inside the v07 folder.
 

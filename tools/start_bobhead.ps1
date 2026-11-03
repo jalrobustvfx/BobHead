@@ -5,6 +5,49 @@ function Get-BobHeadHash([string]$path) {
     try { return [BitConverter]::ToString($sha.ComputeHash($stream)).Replace('-', '').ToLowerInvariant() }
     finally { $stream.Dispose(); $sha.Dispose() }
 }
+function Save-BobHeadDownload([string]$url, [string]$destination, [long]$expectedBytes,
+    [long]$completedBytes, [long]$totalBytes) {
+    $request = [Net.HttpWebRequest]::Create($url)
+    $request.UserAgent = 'BobHead-Setup-v07'
+    $request.Timeout = 60000
+    $request.ReadWriteTimeout = 120000
+    $response = $null
+    $inputStream = $null
+    $outputStream = $null
+    $received = [long]0
+    $timer = [Diagnostics.Stopwatch]::StartNew()
+    $lastUpdate = -1.0
+    try {
+        $response = $request.GetResponse()
+        $inputStream = $response.GetResponseStream()
+        $outputStream = [IO.File]::Create($destination)
+        $buffer = New-Object byte[] 65536
+        do {
+            $count = $inputStream.Read($buffer, 0, $buffer.Length)
+            if ($count -gt 0) {
+                $received += $count
+                if ($received -gt $expectedBytes) { throw 'Download is larger than expected.' }
+                $outputStream.Write($buffer, 0, $count)
+            }
+            $seconds = $timer.Elapsed.TotalSeconds
+            if (($seconds - $lastUpdate -ge 0.2) -or ($count -eq 0)) {
+                $done = $completedBytes + $received
+                $fraction = [Math]::Min(1.0, $done / [double]$totalBytes)
+                $filled = [int][Math]::Floor($fraction * 20)
+                $bar = ('#' * $filled) + ('-' * (20 - $filled))
+                $speed = $received / 1MB / [Math]::Max(0.01, $seconds)
+                $line = '[{0}] {1,5:N1}%  {2:N0}/{3:N0} MiB  {4:N1} MiB/s' -f $bar, ($fraction * 100), ($done / 1MB), ($totalBytes / 1MB), $speed
+                [Console]::Write("`r" + $line + '    ')
+                $lastUpdate = $seconds
+            }
+        } while ($count -gt 0)
+    } finally {
+        if ($outputStream) { $outputStream.Dispose() }
+        if ($inputStream) { $inputStream.Dispose() }
+        if ($response) { $response.Dispose() }
+        [Console]::WriteLine()
+    }
+}
 $manifest = ConvertFrom-Json @'
 __MANIFEST_JSON__
 '@
@@ -30,25 +73,24 @@ New-Item -ItemType Directory -Force -Path $cache | Out-Null
 Write-Host 'BobHead first-time setup. Keep this window open.'
 Write-Host 'Downloading the bundled app. Model downloads happen inside the app afterward.'
 
+$completedDownloadBytes = [long]0
 foreach ($part in $manifest.parts) {
     $target = Join-Path $cache $part.name
     $valid = (Test-Path -LiteralPath $target) -and
         ((Get-Item -LiteralPath $target).Length -eq $part.bytes) -and
         ((Get-BobHeadHash $target) -eq $part.sha256)
-    if ($valid) { Write-Host ('Reusing verified download: ' + $part.name); continue }
+    if ($valid) { Write-Host ('Reusing verified download: ' + $part.name); $completedDownloadBytes += $part.bytes; continue }
     $partial = $target + '.partial'
     Write-Host ('Downloading ' + $part.name + ' (' + [Math]::Round($part.bytes / 1GB, 2) + ' GiB)...')
-    $client = New-Object Net.WebClient
-    try {
-        $client.Headers.Add('User-Agent', 'BobHead-Setup-v07')
-        $client.DownloadFile($baseUrl + '/' + $part.name, $partial)
-    } finally { $client.Dispose() }
+    Save-BobHeadDownload ($baseUrl + '/' + $part.name) $partial $part.bytes $completedDownloadBytes $manifest.bytes
+    Write-Host 'Checking downloaded file...'
     if (((Get-Item -LiteralPath $partial).Length -ne $part.bytes) -or
         ((Get-BobHeadHash $partial) -ne $part.sha256)) {
         throw ('Download verification failed: ' + $part.name + '. Run this starter again to retry.')
     }
     # These paths are fixed filenames inside the starter's own download directory.
     Move-Item -LiteralPath $partial -Destination $target -Force
+    $completedDownloadBytes += $part.bytes
 }
 
 $archive = Join-Path $cache $manifest.archive
