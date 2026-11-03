@@ -1,0 +1,32 @@
+{
+  "workflow": "v07",
+  "status": "passed",
+  "job_id": "3d95e297851b5e61355d341fec68e0d7",
+  "source": "Me01.mp4",
+  "duration_seconds": 4.8,
+  "frames": 144,
+  "fps": 30.0,
+  "resolution": [
+    352,
+    640
+  ],
+  "audio_correlation": 0.9997618046183903,
+  "full_decode": "passed",
+  "models": 15,
+  "model_bytes": 118918295544,
+  "automated_tests_passed": 21,
+  "standalone_startup": "passed",
+  "standalone_model_setup": "15 main models, including all three Qwen files; downloads not rerun",
+  "head_size": {
+    "min": 1.2,
+    "max": 2.0,
+    "default": 1.7,
+    "server_range_checks": "passed",
+    "api_to_pose_connection": "passed"
+  },
+  "interface_checks": [
+    "desktop layout",
+    "390px narrow layout without horizontal overflow",
+    "keyboard bounds and presets"
+  ]
+}

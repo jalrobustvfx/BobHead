@@ -47,6 +47,13 @@ class LauncherTests(unittest.TestCase):
             self.assertEqual(log.name, 'comfyui.log')
             self.assertEqual(start.call_args_list[1].args[2].name, 'bobhead.log')
 
+    def test_older_workflow_instance_is_not_silently_reused(self):
+        health = {'app': 'bobhead', 'workflow': 'v06', 'comfy_url': 'http://127.0.0.1:8188'}
+        with patch.object(launcher, 'DATA', self.root / 'data'), patch.object(launcher, 'read_json', return_value=health), patch.object(launcher, 'start_background') as start:
+            with self.assertRaisesRegex(RuntimeError, 'older BobHead'):
+                launcher.launch(self.portable, open_browser=False)
+            start.assert_not_called()
+
     def test_unrelated_port_is_not_replaced(self):
         with patch.object(launcher, 'DATA', self.root / 'data'), patch.object(launcher, 'read_json', return_value=None), patch.object(launcher, 'port_in_use', return_value=True), patch.object(launcher, 'start_background') as start:
             with self.assertRaisesRegex(RuntimeError, 'Port 8787 is in use'):

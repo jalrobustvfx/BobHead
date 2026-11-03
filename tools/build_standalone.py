@@ -43,7 +43,7 @@ def inventory(portable, shared_models=None, hf_cache=None):
         tree(source, runtime / 'ComfyUI/custom_nodes' / pack['folder'], 'custom-node',
              skip=('ckpts', 'cache', '.cache'), exclude_weights=True)
 
-    # v06 ships code/runtime only. All checkpoints are first-launch downloads.
+    # Ship code/runtime only. All checkpoints are first-launch downloads.
     return sorted(items.values(), key=lambda item: item['target'])
 
 

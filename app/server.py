@@ -74,12 +74,22 @@ def build_prompt(template, filename, options, job_id):
     duration = int(options.get('duration', 5))
     if not 1 <= duration <= 10:
         raise ValueError('Clip length must be between 1 and 10 seconds.')
-    prompt_text = str(options.get('prompt') or DEFAULT_PROMPT).strip()
+    scale = options.get('head_size', template['5116']['inputs']['strength'])
+    try:
+        if isinstance(scale, bool): raise ValueError()
+        scale = float(scale)
+    except (TypeError, ValueError):
+        raise ValueError('Head size must be between 1.2 and 2.0.') from None
+    if not math.isfinite(scale) or not 1.2 <= scale <= 2.0:
+        raise ValueError('Head size must be between 1.2 and 2.0.')
+    prompt_node, prompt_field = prompt_target(template)
+    prompt_text = str(options.get('prompt') or template[prompt_node]['inputs'].get(prompt_field) or DEFAULT_PROMPT).strip()
     if len(prompt_text) > 2000:
         raise ValueError('The description must be 2,000 characters or fewer.')
     prompt = copy.deepcopy(template)
     prompt['5060']['inputs']['video'] = filename
     prompt['5060']['inputs']['skip_first_frames'] = 0
+    prompt['5116']['inputs']['strength'] = scale
     # LTX video latents use 8n+1 frames. Never ask Wan to animate the raw
     # source count after LTX has rounded it down during encode/decode.
     prompt['5060']['inputs']['frame_load_cap'] = ((duration * 30 - 1) // 8) * 8 + 1
@@ -90,13 +100,20 @@ def build_prompt(template, filename, options, job_id):
     else:
         prompt['bobhead_frame_count'] = {'class_type': 'GetImageSizeAndCount', 'inputs': {'image': ['5088', 0]}}
         prompt['5164']['inputs']['num_frames'] = ['bobhead_frame_count', 3]
-    # Keep the author's complete v06 pose settings, including fixed strength 1.5.
-    prompt['5165']['inputs']['positive_prompt'] = prompt_text
+    # Preserve the authored pose settings. In v07, direction edits the Qwen
+    # reference image; the animation prompt remains exactly as authored.
+    prompt[prompt_node]['inputs'][prompt_field] = prompt_text
     prompt[OUTPUT_NODE]['inputs'].update(filename_prefix=f'BobHead/{job_id}', format='video/h264-mp4',
                                         pix_fmt='yuv420p', crf=19, trim_to_audio=True, save_output=True)
     # Keep the workflow's seeds, attention mode, dynamic size and sampling settings.
     # Only the final encoder remains; debug GIFs and NVENC preview outputs are pruned.
     return ancestors(prompt)
+
+
+def prompt_target(template):
+    if template.get('5214:474', {}).get('class_type') == 'TextEncodeQwenImage21':
+        return '5214:474', 'prompt'
+    return '5165', 'positive_prompt'
 
 
 def stage_for(node_id, graph):
@@ -105,6 +122,7 @@ def stage_for(node_id, graph):
     if kind in ('DWPreprocessor', 'OpenposeRenderNode'): return 'Tracking the movement'
     if kind == 'PE_PoseKeypointEffects': return 'Giving your head a little extra personality'
     if kind in ('SAM2Segment', 'InpaintCropImproved'): return 'Finding the face'
+    if kind in ('TextEncodeQwenImage21', 'QwenImage21Cache', 'KSampler', 'VAEDecode'): return 'Creating your doll-style reference'
     if kind in ('WanVideoSampler', 'WanVideoDecode'): return 'Bringing your bobhead to life'
     if kind == 'VHS_VideoCombine': return 'Adding your original audio'
     if kind in ('SamplerCustomAdvanced', 'VAEDecodeTiled'): return 'Preparing the scene'
@@ -127,6 +145,8 @@ def create_app(comfy_url='http://127.0.0.1:8188', data_dir=None):
     app['tasks'] = set()
     setup = ModelSetup(ROOT)
     app['template'] = json.loads((ROOT / 'workflows' / 'BobHead_API.json').read_text(encoding='utf-8'))
+    metadata_path = ROOT / 'environment' / 'app-workflow.json'
+    workflow_name = json.loads(metadata_path.read_text())['workflow'] if metadata_path.exists() else 'BobHead_Comfyui_v06.json'
 
     @web.middleware
     async def guard(request, handler):
@@ -168,10 +188,12 @@ def create_app(comfy_url='http://127.0.0.1:8188', data_dir=None):
             return web.json_response({'ready': False, 'connected': False, 'issues': [f'Start ComfyUI at {app["comfy_url"]}.'], 'details': str(exc)})
         issues = resolve_models(copy.deepcopy(app['template']), info)
         return web.json_response({'ready': not issues, 'connected': True, 'issues': issues,
-            'workflow': 'BobHead_Comfyui_v06.json',
+            'workflow': workflow_name,
             'comfy_version': stats['system'].get('comfyui_version'),
             'device': next((d['name'] for d in stats.get('devices', [])), 'Unknown device'),
-            'default_prompt': DEFAULT_PROMPT, 'node_count': len(app['template'])})
+            'default_prompt': app['template'][prompt_target(app['template'])[0]]['inputs'][prompt_target(app['template'])[1]],
+            'head_size': {'min': 1.2, 'max': 2.0, 'default': app['template']['5116']['inputs']['strength']},
+            'node_count': len(app['template'])})
 
     async def upload(request):
         reader = await request.multipart()
@@ -273,7 +295,7 @@ def create_app(comfy_url='http://127.0.0.1:8188', data_dir=None):
         issues = resolve_models(prompt, await comfy('/object_info'))
         if issues: raise ValueError('Setup needs attention: ' + '; '.join(issues))
         # Leave the user's existing ComfyUI work alone; new jobs join its queue.
-        job = {'id': job_id, 'status': 'starting', 'stage': 'Connecting to the engine', 'created': time.time(), 'upload_id': data['upload_id'], 'options': {'duration': int(data.get('duration', 5)), 'prompt': data.get('prompt', '')}}
+        job = {'id': job_id, 'status': 'starting', 'stage': 'Connecting to the engine', 'created': time.time(), 'upload_id': data['upload_id'], 'options': {'duration': int(data.get('duration', 5)), 'prompt': data.get('prompt', ''), 'head_size': prompt['5116']['inputs']['strength']}}
         app['jobs'][job_id] = job
         save_job(job)
         task = asyncio.create_task(monitor(job, prompt))
@@ -338,7 +360,7 @@ def create_app(comfy_url='http://127.0.0.1:8188', data_dir=None):
 
     async def index(request): return web.FileResponse(PUBLIC / 'index.html', headers={'Cache-Control': 'no-store'})
     async def health(request):
-        return web.json_response({'app': 'bobhead', 'workflow': 'v06', 'comfy_url': app['comfy_url']})
+        return web.json_response({'app': 'bobhead', 'workflow': Path(workflow_name).stem.rsplit('_', 1)[-1], 'comfy_url': app['comfy_url']})
     async def model_status(request):
         return web.json_response(setup.status())
     async def model_download(request):

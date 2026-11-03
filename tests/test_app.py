@@ -18,28 +18,50 @@ class WorkflowTests(unittest.TestCase):
         self.graph = json.loads((ROOT / 'workflows/BobHead_API.json').read_text())
 
     def test_audio_reference_and_pose_guide_remain_connected(self):
-        prompt = build_prompt(self.graph, 'uploaded.mp4', {'duration': 3, 'head_size': 2.1}, 'test-job')
+        prompt = build_prompt(self.graph, 'uploaded.mp4', {'duration': 3}, 'test-job')
         self.assertEqual(prompt['5060']['inputs']['video'], 'uploaded.mp4')
         self.assertEqual(prompt['5060']['inputs']['frame_load_cap'], 89)
         self.assertEqual(prompt['5164']['inputs']['num_frames'], ['5194', 2])
-        self.assertEqual(prompt['5194']['inputs']['image'], ['5088', 0])
+        self.assertEqual(prompt['5194']['inputs']['image'], ['5241', 0])
         self.assertEqual(prompt['5164']['inputs']['width'], ['5194', 0])
         self.assertEqual(prompt['5164']['inputs']['height'], ['5194', 1])
         self.assertEqual(prompt['5144']['inputs']['strength_1'], 1)
-        self.assertEqual(prompt['5116']['inputs']['strength'], 1.5)
+        self.assertEqual(prompt['5116']['inputs']['strength'], 1.7)
         self.assertEqual(prompt['5187']['inputs']['audio'], ['5060', 2])
         self.assertIn('5124', prompt)  # First processed frame is used as the reference.
         self.assertEqual(prompt['5124']['inputs']['indexes'], '0')
-        self.assertEqual(prompt['5165']['inputs']['positive_prompt'], DEFAULT_PROMPT)
+        self.assertEqual(prompt['5165']['inputs']['positive_prompt'], self.graph['5165']['inputs']['positive_prompt'])
+        self.assertEqual(prompt['5214:474']['inputs']['prompt'], self.graph['5214:474']['inputs']['prompt'])
+        self.assertEqual(prompt['5214:474']['inputs']['images.image_1'], ['5122', 0])
+        self.assertEqual(prompt['5214:474']['inputs']['images.image_2'], ['5244', 0])
+        self.assertEqual(prompt['5164']['inputs']['ref_images'], ['5223', 0])
+        self.assertNotIn('5214:500', prompt)  # Disabled prompt enhancer stays pruned.
         self.assertNotIn('clown', DEFAULT_PROMPT)
         self.assertEqual(prompt['5136']['inputs']['attention_mode'], 'sdpa')
         outputs = [n for n in prompt.values() if n['class_type'] == 'VHS_VideoCombine']
         self.assertEqual(len(outputs), 1)
         self.assertNotIn('video/nvenc', json.dumps(prompt))
 
+    def test_direction_edits_reference_without_replacing_animation_prompt(self):
+        prompt = build_prompt(self.graph, 'clip.mp4', {'prompt': 'A custom doll'}, 'test')
+        self.assertEqual(prompt['5214:474']['inputs']['prompt'], 'A custom doll')
+        self.assertEqual(prompt['5165']['inputs']['positive_prompt'], self.graph['5165']['inputs']['positive_prompt'])
+        self.assertEqual(prompt['5214:458']['inputs']['steps'], 25)
+        self.assertEqual(prompt['5214:451']['inputs']['unet_name'], 'qwen_image_2.1_int8_convrot.safetensors')
+
     def test_controls_reject_invalid_values(self):
         for options in [{'duration': 11}, {'duration': 0}]:
             with self.assertRaises(ValueError): build_prompt(self.graph, 'clip.mp4', options, 'test')
+
+    def test_head_size_limits_and_pose_connection(self):
+        for scale in [1.2, 1.7, 2.0]:
+            prompt = build_prompt(self.graph, 'clip.mp4', {'head_size': scale}, 'test')
+            self.assertEqual(prompt['5116']['inputs']['strength'], scale)
+            self.assertEqual(prompt['5115']['inputs']['POSE_KEYPOINT'], ['5116', 0])
+            self.assertEqual(prompt['5214:474']['inputs']['images.image_2'], ['5244', 0])
+        for scale in [1.19, 2.01, float('nan'), float('inf'), True, None, 'invalid']:
+            with self.assertRaisesRegex(ValueError, 'Head size'):
+                build_prompt(self.graph, 'clip.mp4', {'head_size': scale}, 'test')
 
     def test_templates_are_not_mutated(self):
         before = json.dumps(self.graph, sort_keys=True)
@@ -108,15 +130,16 @@ class ApplicationTests(unittest.IsolatedAsyncioTestCase):
         response = await self.client.post('/api/uploads', data=form)
         upload = await response.json()
         self.assertEqual(self.uploaded, b'example-video')
-        response = await self.client.post('/api/jobs', json={'upload_id': upload['upload_id'], 'head_size': 1.7, 'duration': 2})
+        response = await self.client.post('/api/jobs', json={'upload_id': upload['upload_id'], 'head_size': 2.0, 'duration': 2})
         self.assertEqual(response.status, 202)
         job = await response.json()
-        self.assertNotIn('head_size', job['options'])
+        self.assertEqual(job['options']['head_size'], 2.0)
         for _ in range(30):
             status = await (await self.client.get('/api/jobs/' + job['id'])).json()
             if status['status'] in ('complete', 'error'): break
             await asyncio.sleep(.1)
         self.assertEqual(status['status'], 'complete', status)
+        self.assertEqual(self.submitted['prompt']['5116']['inputs']['strength'], 2.0)
         self.assertEqual(self.submitted['prompt']['5060']['inputs']['frame_load_cap'], 57)
         response = await self.client.get('/api/jobs/' + job['id'] + '/video?download=1')
         self.assertEqual(await response.read(), b'fake-video')

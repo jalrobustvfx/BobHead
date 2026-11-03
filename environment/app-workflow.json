@@ -1,7 +1,7 @@
 {
-  "workflow": "BobHead_Comfyui_v06.json",
-  "nodes": 55,
-  "links_checked": 80,
+  "workflow": "BobHead_Comfyui_v07.json",
+  "nodes": 69,
+  "links_checked": 106,
   "dimensions": {
     "width": [
       "5194",

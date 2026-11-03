@@ -2,6 +2,18 @@ const $ = id => document.getElementById(id);
 let upload = null, ready = false, busy = false, localUrl = null, jobId = null, pollTimer = null, startedAt = null, preflight = null;
 function error(message) { $('error').textContent = message; $('error').hidden = !message; }
 function updateButton() { $('generate').disabled = !upload || !ready || busy; $('generate-note').textContent = busy ? 'Keep this tab open. Your video is on its way.' : !ready ? 'Connect your engine to generate.' : upload ? 'Ready when you are. Let’s make it big.' : 'Choose a clip to get started.'; }
+function syncHeadSize() {
+  const value = Number($('head-size').value);
+  $('head-value').textContent = value.toFixed(1) + '×';
+  $('hero-scale').textContent = value.toFixed(1) + '×';
+  $('head-size').setAttribute('aria-valuetext', value.toFixed(1) + ' times head scale');
+  $('head-size').style.setProperty('--range-fill', ((value - 1.2) / .8 * 100) + '%');
+  document.documentElement.style.setProperty('--head-art', .75 + (value - 1.2) * .5);
+  document.querySelectorAll('[data-head-size]').forEach(button => button.setAttribute('aria-pressed', Number(button.dataset.headSize) === value ? 'true' : 'false'));
+}
+$('head-size').addEventListener('input', syncHeadSize);
+document.querySelectorAll('[data-head-size]').forEach(button => button.addEventListener('click', () => { if(busy) return; $('head-size').value = button.dataset.headSize; syncHeadSize(); }));
+syncHeadSize();
 async function checkEngine() {
   try {
     const response = await fetch('/api/preflight'); preflight = await response.json(); ready = preflight.ready;
@@ -40,13 +52,13 @@ $('dropzone').addEventListener('keydown', e => { if(e.key === 'Enter' || e.key =
 ['dragenter','dragover'].forEach(name => $('dropzone').addEventListener(name,e => { e.preventDefault(); $('dropzone').classList.add('dragging'); }));
 ['dragleave','drop'].forEach(name => $('dropzone').addEventListener(name,e => { e.preventDefault(); $('dropzone').classList.remove('dragging'); }));
 $('dropzone').addEventListener('drop', e => chooseFile(e.dataTransfer.files[0]));
-function setBusy(value) { busy = value; ['duration','prompt','file-input','replace-button'].forEach(id => $(id).disabled = value); updateButton(); }
+function setBusy(value) { busy = value; document.querySelectorAll('[data-head-size]').forEach(button => button.disabled = value); ['duration','prompt','head-size','file-input','replace-button'].forEach(id => $(id).disabled = value); updateButton(); }
 function showJob(job) {
   if(!localUrl && job.input_url) {
     $('input-video').src = job.input_url; $('input-video').hidden = false; $('dropzone').hidden = true;
     $('input-name').textContent = job.input_name || 'Your clip'; $('input-badge').hidden = true; $('replace-button').hidden = false;
     localUrl = job.input_url; upload = {upload_id:job.upload_id};
-    if(job.options) { $('duration').value = job.options.duration; $('prompt').value = job.options.prompt || ''; }
+    if(job.options) { $('duration').value = job.options.duration; $('head-size').value = job.options.head_size ?? 1.7; syncHeadSize(); $('prompt').value = job.options.prompt || ''; }
   }
   $('progress-area').hidden = false; $('stage').textContent = job.stage;
   startedAt = job.created * 1000; const seconds = Math.floor(((job.completed ? job.completed*1000 : Date.now())-startedAt)/1000); $('elapsed').textContent = `${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,'0')}`;
@@ -66,14 +78,14 @@ function showJob(job) {
 }
 async function poll() {
   if(!jobId) return;
-  try { const response = await fetch('/api/jobs/'+jobId); if(!response.ok) throw new Error('Could not recover this generation. Check it in ComfyUI or upload a new clip.'); const job = await response.json(); if(showJob(job)) pollTimer = setTimeout(poll,1500); }
+  try { const response = await fetch('/api/jobs/'+jobId); if(response.status === 404 && !new URLSearchParams(location.search).has('job')) { localStorage.removeItem('bobhead-job'); jobId = null; return; } if(!response.ok) throw new Error('Could not recover this generation. Check it in ComfyUI or upload a new clip.'); const job = await response.json(); if(showJob(job)) pollTimer = setTimeout(poll,1500); }
   catch(e) { error(e.message); setBusy(false); }
 }
 $('generate').addEventListener('click', async () => {
   if(!upload || busy) return; error(''); setBusy(true);
   $('download').hidden = true; $('output-video').hidden = true; $('output-video').pause(); $('output-video').removeAttribute('src'); $('result-placeholder').hidden = false;
   $('result-badge').textContent = 'IN THE MAKING'; $('result-caption').textContent = 'Good things take a little rendering.'; $('result-star').hidden = false;
-  try { const response = await fetch('/api/jobs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({upload_id:upload.upload_id,duration:Number($('duration').value),prompt:$('prompt').value})}); const job = await response.json(); if(!response.ok) throw new Error(job.error || 'Could not start generation'); jobId = job.id; localStorage.setItem('bobhead-job',jobId); showJob(job); poll(); }
+  try { const response = await fetch('/api/jobs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({upload_id:upload.upload_id,duration:Number($('duration').value),head_size:Number($('head-size').value),prompt:$('prompt').value})}); const job = await response.json(); if(!response.ok) throw new Error(job.error || 'Could not start generation'); jobId = job.id; localStorage.setItem('bobhead-job',jobId); showJob(job); poll(); }
   catch(e) { error(e.message); setBusy(false); }
 });
 $('how-button').addEventListener('click', () => $('info-dialog').showModal());
@@ -100,7 +112,7 @@ async function checkModels(first=false) {
       row.append(link,detail); list.append(row);
     });
     const count=state.models.filter(m=>m.installed).length;
-    $('model-summary').textContent=state.complete ? 'All 12 main models are installed. You’re ready to create.' : `${count} of ${state.models.length} installed · ${gb(state.remaining_bytes)} left to download.`;
+    $('model-summary').textContent=state.complete ? `All ${state.models.length} main models are installed. You’re ready to create.` : `${count} of ${state.models.length} installed · ${gb(state.remaining_bytes)} left to download.`;
     $('model-progress').textContent=state.current ? `${state.downloaded >= (state.models.find(m=>m.path===state.current)?.bytes || Infinity) ? 'Verifying' : 'Downloading'} ${state.current.split('/').pop()} · ${gb(state.downloaded)}` : state.complete ? 'Setup complete. Close this window to get started.' : 'Start or resume whenever you’re ready.';
     const current=state.models.find(m=>m.path===state.current);
     $('model-bar').value=current ? state.downloaded/current.bytes : state.complete ? 1 : 0;

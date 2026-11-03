@@ -1,4 +1,4 @@
-# v06 models — download separately
+# v07 models — download separately
 
 No model weights are packaged. The app installs these files under its bundled ComfyUI `models/` folder.
 
@@ -16,6 +16,11 @@ No model weights are packaged. The app installs these files under its bundled Co
 | `vae/Wan2_1_VAE_bf16.safetensors` | 0.25 GB | [Download](https://huggingface.co/Kijai/WanVideo_comfy/resolve/main/Wan2_1_VAE_bf16.safetensors) |
 | `clip_vision/clip_vision_h.safetensors` | 1.26 GB | [Download](https://huggingface.co/calcuis/wan-gguf/resolve/e1b5a63a5c9c8fc999134a19e0732978fc826a52/clip_vision_h.safetensors) |
 | `text_encoders/umt5-xxl-enc-bf16.safetensors` | 11.36 GB | [Download](https://huggingface.co/Kijai/WanVideo_comfy/resolve/main/umt5-xxl-enc-bf16.safetensors) |
+| `diffusion_models/qwen_image_2.1_int8_convrot.safetensors` | 7.26 GB | [Download](https://huggingface.co/Comfy-Org/Qwen-Image-2.1/resolve/main/diffusion_models/qwen_image_2.1_int8_convrot.safetensors) |
+| `text_encoders/qwen3vl_8b_int8_convrot.safetensors` | 9.35 GB | [Download](https://huggingface.co/Comfy-Org/Qwen-Image-2.1/resolve/main/text_encoders/qwen3vl_8b_int8_convrot.safetensors) |
+| `vae/qwen_image_2.1_vae_bf16.safetensors` | 0.68 GB | [Download](https://huggingface.co/Comfy-Org/Qwen-Image-2.1/resolve/main/vae/qwen_image_2.1_vae_bf16.safetensors) |
+
+V07 adds these three Qwen files (17.3 GB) to the twelve v06 models. All 15 main files total approximately **118.9 GB**; allow additional space for supporting downloads and outputs. The Qwen model and text encoder are the INT8 convrot versions selected in the workflow.
 
 Exact pinned URLs, byte counts and SHA256 values are in `environment/model-downloads.json`.
 

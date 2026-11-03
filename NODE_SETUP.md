@@ -18,3 +18,7 @@ These packs are used by the app API graph. Install their dependencies into the s
 | was-ns | 3.0.1 | https://github.com/ltdrdata/was-node-suite-comfyui |
 
 | comfyui-florence2 (added in v06) | 1.1.0 | https://github.com/kijai/ComfyUI-Florence2 |
+
+## V07 Qwen stage
+
+The Image Edit subgraph uses ComfyUI core nodes `TextEncodeQwenImage21` and `QwenImage21Cache`, plus the core Qwen model, CLIP, VAE, sampler, and switch nodes. The app compiles this subgraph into normal API nodes, so the browser does not need to supply the subgraph definition at generation time. The disabled prompt-enhancer branch is pruned; no additional enhancer model is required. Use a ComfyUI build exposing these Qwen 2.1 nodes.

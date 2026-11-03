@@ -1,8 +1,18 @@
 # BobHead
 
-[![Complete BobHead app interface, including header, video panels, controls, and footer](docs/screenshots/interface-me-full.jpg)](docs/screenshots/interface-me-full.jpg)
+[![Complete BobHead app interface, including header, video panels, controls, and footer](docs/screenshots/interface-v07-full.jpg)](docs/screenshots/interface-v07-full.jpg)
 
 Turn a short video of someone talking into a bobhead video, with an enlarged head, the original head movement, and the original dialogue.
+
+**Latest: [v07 workflow](workflows/BobHead_Comfyui_v07.json) · [Run the current app from source](docs/DEVELOPMENT.md) · [v07 setup guide](workflows/README-v07.md)**
+
+## V07 app update
+
+The current source app uses **v07**, including a Qwen Image 2.1 stage that creates a doll-style reference from the first processed frame and the enlarged OpenPose guide. Head size is adjustable from **1.2× to 2.0×**, defaulting to **1.7×**. Optional direction edits the doll reference prompt; the animation prompt stays as authored.
+
+Model setup now lists **15 files, approximately 118.9 GB** total. The three new Qwen files add approximately **17.3 GB**. See [model downloads](MODELS.md).
+
+The interface shown above and the source app are v07. The downloadable Windows **v0.6.0 release** and the older walkthrough/examples below describe v06. To use the latest interface and workflow, follow the [v07 source setup](docs/DEVELOPMENT.md).
 
 ## See it in action
 
@@ -14,9 +24,15 @@ The creator's own footage: original on the left, enlarged-head result on the rig
 
 The tutorial covers downloading BobHead, model setup, uploading your clip, generating, and saving the result. [Download the walkthrough MP4](docs/media/how-to-use-me.mp4).
 
-Built for the [ComfyUI open-source competition](https://comfy.org/open-source-higgsfield/). This repository includes the app, v06 workflow, custom pose effect, setup instructions, and actual input/output examples.
+Built for the [ComfyUI open-source competition](https://comfy.org/open-source-higgsfield/). This repository includes the app, v07 workflow, custom pose effect, setup instructions, and actual input/output examples.
 
-## Run the app
+## Run the latest app (v07)
+
+Download this repository using **Code → Download ZIP**, or clone it. Follow the [developer setup](docs/DEVELOPMENT.md) to connect the app to a working ComfyUI installation with the [v07 models](MODELS.md) and [required nodes](NODE_SETUP.md). The current app includes the redesigned interface and the **1.2×–2.0× head-size slider**.
+
+## Packaged Windows app (v0.6.0)
+
+The starter instructions below install the older v06 package.
 
 **[Example files: before.mp4 and after.mp4](exmaples%20files)** — download the source footage to test BobHead and compare it with the enlarged-head result.
 
@@ -47,11 +63,11 @@ The source is the creator's own `Me01.mp4`. Upload `before.mp4` in BobHead and c
 
 The workflow takes the first video frame as its reference image. A custom OpenPose effect enlarges the head in the pose guidance, while the video pipeline uses the source motion to animate the result. The final video combines the generated frames with the original source audio.
 
-The app uses workflow **v06**. Head scale is fixed at **1.5** in the custom pose node; there is no size slider. The interface handles uploads, model setup, progress, previews, and downloads locally through ComfyUI.
+The current source app uses workflow **v07**. The head-size slider drives the custom pose node from **1.2× to 2.0×**, defaulting to **1.7×**. The interface handles uploads, model setup, progress, previews, and downloads locally through ComfyUI.
 
 ## Source and reproducibility
 
-- [Editable ComfyUI v06 workflow](workflows/BobHead_Comfyui_v06.json)
+- [Editable ComfyUI v07 workflow](workflows/BobHead_Comfyui_v07.json)
 - [Compiled API workflow](workflows/BobHead_API.json)
 - [Custom pose-effect node](custom_nodes/comfyui-pose-effects)
 - [Required node packs and sources](NODE_SETUP.md)
@@ -59,7 +75,7 @@ The app uses workflow **v06**. Head scale is fixed at **1.5** in the custom pose
 - [Developer setup, validation, and packaging](docs/DEVELOPMENT.md)
 - [Recorded dependency versions](environment/installed-packages.txt) and [source inventory](environment/source-versions.json)
 
-The app's 16 automated checks pass. The included result was generated with the bundled v06 runtime, and the current example was checked for video decoding and source/result audio. The complete first-time model download has not been rerun from an empty model folder.
+The app's automated checks cover v07 prompt routing, graph connections, downloads, and launch behavior. The included result was generated with the bundled v06 runtime, and the current example was checked for video decoding and source/result audio. The complete first-time model download has not been rerun from an empty model folder.
 
 ## Credits and licensing
 

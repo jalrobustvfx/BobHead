@@ -1,5 +1,7 @@
 # Download and install BobHead
 
+> **Version note:** This packaged-install guide describes Windows release v0.6.0. The latest v07 app has a redesigned interface, a 1.2×–2.0× head-size slider, and 15 main models (about 118.9 GB). Use the [current source setup](docs/DEVELOPMENT.md) for v07.
+
 You can install BobHead by downloading and running one starter file. Python, ComfyUI, and the required custom nodes are included; you do not need to install them separately.
 
 ## Before you start

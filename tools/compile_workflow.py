@@ -13,51 +13,97 @@ from server import ancestors, build_prompt
 
 
 def compile_workflow(workflow, info):
-    nodes = {str(n['id']): n for n in workflow['nodes']}
-    links = {link[0]: link for link in workflow['links']}
-    setters = {n['widgets_values_named']['Constant']: n for n in workflow['nodes'] if n['type'] == 'SetNode'}
+    """Flatten saved subgraphs and virtual links into executable API nodes.
 
-    def resolve(node_id, slot, seen=()):
-        node_id = str(node_id)
-        if node_id in seen: raise ValueError('Cycle in virtual links.')
-        node = nodes[node_id]
-        if node['type'] == 'GetNode':
-            setter = setters[node['widgets_values_named']['Constant']]
-            return resolve(str(setter['id']), 0, seen + (node_id,))
-        if node['type'] in ('SetNode', 'Reroute'):
-            link = links[node['inputs'][0]['link']]
-            return resolve(link[1], link[2], seen + (node_id,))
-        if node.get('mode', 0) != 0: raise ValueError(f'Unsupported bypass/mute at {node_id}.')
-        return [node_id, slot]
-
+    Resolve constant switches before traversing their inputs so disabled prompt
+    enhancers do not introduce unused model dependencies.
+    """
+    definitions = {s['id']: s for s in workflow.get('definitions', {}).get('subgraphs', [])}
     graph = {}
-    for key, node in nodes.items():
-        kind = node['type']
-        if kind in ('GetNode', 'SetNode', 'Reroute', 'Note', 'MarkdownNote'): continue
-        if kind not in info: continue  # Missing executable dependencies are caught below.
-        schema = info[kind].get('input', {})
-        specs = {**schema.get('required', {}), **schema.get('optional', {})}
-        values = node.get('widgets_values_named') or {}
-        if not isinstance(values, dict): raise ValueError(f'Named widget export required for node {key}.')
-        extra_fields = set()
-        if kind == 'VHS_VideoCombine':
-            formats = specs['format'][1].get('formats', {})
-            extra_fields = {item[0] for item in formats.get(values.get('format'), [])}
-        inputs = {}
-        for name, value in values.items():
-            if name in specs or name in extra_fields or ('.' in name and name.split('.')[0] in specs):
-                value = copy.deepcopy(value)
-                if name in specs:
-                    type_name = specs[name][0]
-                    if type_name == 'BOOLEAN' and not isinstance(value, bool): value = bool(value)
-                    elif type_name == 'INT': value = int(value)
-                    elif type_name == 'FLOAT': value = float(value)
-                inputs[name] = value
-        for socket in node.get('inputs', []):
+    missing = object()
+
+    def context(document, prefix='', bindings=None):
+        bindings = bindings or {}
+        nodes = {str(n['id']): n for n in document['nodes']}
+        links = {str(l['id'] if isinstance(l, dict) else l[0]):
+                 ([l['id'], l['origin_id'], l['origin_slot'], l['target_id'], l['target_slot'], l['type']]
+                  if isinstance(l, dict) else l) for l in document['links']}
+        setters = {n.get('widgets_values_named', {}).get('Constant'): n
+                   for n in nodes.values() if n['type'] == 'SetNode'}
+        children = {}
+        resolving = set()
+
+        def value(node, name):
+            socket = next((x for x in node.get('inputs', []) if x['name'] == name), {})
             if socket.get('link') is not None:
-                link = links[socket['link']]
-                inputs[socket['name']] = resolve(link[1], link[2])
-        graph[key] = {'class_type': kind, 'inputs': inputs}
+                link = links[str(socket['link'])]
+                return resolve(link[1], link[2])
+            return node.get('widgets_values_named', {}).get(name, missing)
+
+        def resolve(node_id, slot):
+            key = str(node_id)
+            if key == str(document.get('inputNode', {}).get('id', '__none__')):
+                return bindings.get(document['inputs'][slot]['name'], missing)
+            node = nodes[key]
+            kind = node['type']
+            if node.get('mode', 0) != 0:
+                raise ValueError(f'Unsupported bypass/mute at {prefix + key}.')
+            if kind == 'GetNode':
+                setter = setters[node['widgets_values_named']['Constant']]
+                return resolve(setter['id'], 0)
+            if kind in ('SetNode', 'Reroute', 'PreviewAny'):
+                return value(node, node['inputs'][0]['name'])
+            if kind == 'ComfySwitchNode':
+                switch = value(node, 'switch')
+                if isinstance(switch, bool):
+                    return value(node, 'on_true' if switch else 'on_false')
+            if kind in definitions:
+                if key not in children:
+                    definition = definitions[kind]
+                    bound = {x['name']: value(node, x['name']) for x in definition.get('inputs', [])}
+                    children[key] = context(definition, prefix + key + ':', bound)
+                return children[key](slot)
+            api_key = prefix + key
+            if api_key not in graph:
+                if api_key in resolving:
+                    raise ValueError(f'Cycle in workflow at {api_key}.')
+                if kind not in info:
+                    raise ValueError(f'Missing node: {kind}')
+                resolving.add(api_key)
+                schema = info[kind].get('input', {})
+                specs = {**schema.get('required', {}), **schema.get('optional', {})}
+                named = node.get('widgets_values_named') or {}
+                inputs = {}
+                extra = set()
+                if kind == 'VHS_VideoCombine':
+                    formats = specs['format'][1].get('formats', {})
+                    extra = {item[0] for item in formats.get(named.get('format'), [])}
+                names = set(named) | {x['name'] for x in node.get('inputs', [])}
+                for name in sorted(names):
+                    if name not in specs and name not in extra and not ('.' in name and name.split('.')[0] in specs):
+                        continue
+                    item = value(node, name)
+                    if item is missing:
+                        continue
+                    item = copy.deepcopy(item)
+                    if name in specs and not isinstance(item, list):
+                        type_name = specs[name][0]
+                        if type_name == 'BOOLEAN': item = bool(item)
+                        elif type_name == 'INT': item = int(item)
+                        elif type_name == 'FLOAT': item = float(item)
+                    inputs[name] = item
+                graph[api_key] = {'class_type': kind, 'inputs': inputs}
+                resolving.remove(api_key)
+            return [api_key, slot]
+
+        def output(slot):
+            output_id = document['outputNode']['id']
+            link = next(l for l in links.values() if l[3] == output_id and l[4] == slot)
+            return resolve(link[1], link[2])
+        return output if prefix else resolve
+
+    resolve = context(workflow)
+    resolve('5187', 0)
     return ancestors(graph)
 
 

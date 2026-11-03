@@ -90,6 +90,11 @@ def launch(portable, app_port=8787, engine_port=8188, open_browser=True, timeout
     # Reuse an app only if its identity and engine address match.
     health = read_json(app_url + '/api/health')
     if health and health.get('app') == 'bobhead':
+        workflow_path = ROOT / 'environment/app-workflow.json'
+        if workflow_path.is_file() and health.get('workflow'):
+            expected = Path(json.loads(workflow_path.read_text())['workflow']).stem.rsplit('_', 1)[-1]
+            if health['workflow'] != expected:
+                raise RuntimeError(f'An older BobHead ({health["workflow"]}) is running on this port. Stop it or choose another app port to launch {expected}.')
         if health.get('comfy_url') != comfy_url:
             raise RuntimeError('BobHead is already running with a different engine address. Close that instance or choose another app port.')
     elif port_in_use(app_port):
