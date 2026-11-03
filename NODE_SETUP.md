@@ -22,3 +22,7 @@ These packs are used by the app API graph. Install their dependencies into the s
 ## V07 Qwen stage
 
 The Image Edit subgraph uses ComfyUI core nodes `TextEncodeQwenImage21` and `QwenImage21Cache`, plus the core Qwen model, CLIP, VAE, sampler, and switch nodes. The app compiles this subgraph into normal API nodes, so the browser does not need to supply the subgraph definition at generation time. The disabled prompt-enhancer branch is pruned; no additional enhancer model is required. Use a ComfyUI build exposing these Qwen 2.1 nodes.
+
+## V08 optimization nodes
+
+V08 adds `VRAM_Debug` from the existing comfyui-kjnodes pack. Its two image-pass nodes clear caches, collect garbage and unload models as authored. The same runtime packs and main model files used by v07 are required.

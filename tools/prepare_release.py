@@ -67,7 +67,7 @@ def prepare(archive, destination, repository, tag, part_bytes=1792 * 1024**2):
     checksums += f"\n{manifest['sha256']}  {archive.name}\n"
     (destination / 'SHA256SUMS.txt').write_text(checksums, encoding='ascii')
     template = Path(__file__).with_name('start_bobhead.ps1').read_text(encoding='utf-8')
-    script = template.replace('__MANIFEST_JSON__', manifest_text).replace(
+    script = template.replace('__APP_UPDATE_JSON__', 'null').replace('__APP_UPDATE_URL__', '').replace('__MANIFEST_JSON__', manifest_text).replace(
         '__RELEASE_URL__', repository.rstrip('/') + '/releases/download/' + tag)
     (destination / 'Start-BobHead.cmd').write_bytes((HEADER + script).replace('\r\n', '\n').replace('\n', '\r\n').encode('utf-8'))
     print(json.dumps(manifest, indent=2), flush=True)

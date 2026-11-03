@@ -7,5 +7,5 @@ if not exist "%~dp0runtime\ComfyUI_windows_portable\python_embeded\python.exe" (
   pause
   exit /b 1
 )
-"%~dp0runtime\ComfyUI_windows_portable\python_embeded\python.exe" -s "%~dp0app\launcher.py" --portable "%~dp0runtime\ComfyUI_windows_portable" --app-port 8790 --engine-port 8190 --bundled
+"%~dp0runtime\ComfyUI_windows_portable\python_embeded\python.exe" -s "%~dp0app\launcher.py" --portable "%~dp0runtime\ComfyUI_windows_portable" --app-port 8800 --engine-port 8200 --bundled
 if errorlevel 1 pause

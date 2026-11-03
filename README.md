@@ -1,10 +1,10 @@
 # BobHead
 
-[![Complete BobHead v07 interface](docs/screenshots/interface-v07-full.jpg)](docs/screenshots/interface-v07-full.jpg)
+[![BobHead interface](docs/screenshots/interface-v07-full.jpg)](docs/screenshots/interface-v07-full.jpg)
 
 Turn a short video into a playful doll-style BobHead, preserving the performance and original dialogue.
 
-**[Download Start-BobHead.cmd](https://github.com/jalrobustvfx/BobHead/releases/latest/download/Start-BobHead.cmd)** · **[Alternative: Google Drive ZIP (3.41 GB)](https://drive.google.com/file/d/1AybkXAA47niFAuONsnjIE33zdB76Z3DU/view?usp=sharing)** · **[Installation guide](INSTALL.md)** · **[Before/after example files](example%20files)**
+**[Download Start-BobHead.cmd](https://github.com/jalrobustvfx/BobHead/releases/latest/download/Start-BobHead.cmd)** · **[Alternative: Google Drive runtime ZIP (3.41 GB)](https://drive.google.com/file/d/1AybkXAA47niFAuONsnjIE33zdB76Z3DU/view?usp=sharing)** · **[Installation guide](INSTALL.md)** · **[Before/after example files](example%20files)**
 
 ## Download and launch
 
@@ -13,29 +13,34 @@ Turn a short video into a playful doll-style BobHead, preserving the performance
 3. On first launch, click **Download required models**. The **15 main files total about 118.9 GB**, plus supporting downloads and working space. Downloads can pause and resume. Model weights are downloaded separately from their publishers.
 4. Upload a clip, choose a short duration and a head size from **1.2× to 2.0×** (default **1.7×**), then click **Make me a bobhead**. Preview and download the result.
 
-Keep the folder together and use the same starter for future launches. Completed setup is reused. If you have v06 installed, use a new folder for v07; the new starter installs `BobHead-Standalone-v07`.
+Keep the folder together and use the same starter for future launches. Completed setup is reused. If you have v07 installed, you can upgrade in place using the instructions below. Use a new installation folder when coming from v06. New installations use the model-free runtime base in `BobHead-Standalone-v07` and automatically apply the v08 app update.
 
-**[Watch the narrated download, launch and use guide (1:56)](docs/media/download-launch-use.mp4)** — the current interface and one-file Windows installation, with Higgsfield's Archie voiceover.
+**[Watch the narrated download, launch and use guide (1:56)](docs/media/download-launch-use.mp4)** — the current interface and one-file Windows installation (controls unchanged in v08), with Higgsfield's Archie voiceover.
 
 [![BobHead v07 installation and usage walkthrough](docs/screenshots/v07-voiced-guide.jpg)](docs/media/download-launch-use.mp4)
 
 ## Alternative download: Google Drive
 
-If the starter download fails or stalls, **[download the complete v07 app ZIP from Google Drive](https://drive.google.com/file/d/1AybkXAA47niFAuONsnjIE33zdB76Z3DU/view?usp=sharing)** (about **3.41 GB**).
+If the starter download fails or stalls, **[download the v07 runtime ZIP from Google Drive](https://drive.google.com/file/d/1AybkXAA47niFAuONsnjIE33zdB76Z3DU/view?usp=sharing)** (about **3.41 GB**).
 
 1. Download `BobHead-Standalone-v07.zip` and choose **Extract All**.
-2. Open the extracted `BobHead-Standalone-v07` folder.
-3. Double-click **Launch BobHead.cmd**. Python, ComfyUI and custom nodes are included.
+2. Download [BobHead-App-v08.zip](https://github.com/jalrobustvfx/BobHead/releases/download/v0.8.0/BobHead-App-v08.zip), then extract its contents inside `BobHead-Standalone-v07`, replacing existing application files.
+3. Double-click **Launch BobHead.cmd** in that folder. Python, ComfyUI and custom nodes are included.
 4. In the app, click **Download required models** and wait for all 15 main files to show **Installed**. The ZIP excludes model weights, so model downloads still require Internet access.
 
 Keep the extracted folder together and use **Launch BobHead.cmd** for future launches.
 
-## What's new in v07
+## What's new in v08
 
-- Redesigned cream, lavender and lime interface.
-- Qwen Image 2.1 creates a doll-style reference from the first processed frame and enlarged OpenPose guide.
-- A **1.2×–2.0× head-size slider**, plus presets.
-- All three additional Qwen files are included in the model downloader (about **17.3 GB**).
+- Optimized image preparation with a dedicated 480×813 resize stage.
+- Pose detection resolution reduced from 1024 to 512.
+- VRAM cache cleanup and model unloading between image stages.
+- Updated block-swap routing and the authored v08 sampling settings.
+- The same head-size slider (1.2×–2.0×) and the same 15 main model files. **No new model downloads are required when upgrading from v07.**
+
+**Already installed v07?** Download the new **Start-BobHead.cmd** into the parent folder containing `BobHead-Standalone-v07`, then run it. An installation previously completed through the starter reuses its runtime and models and applies a small v08 app update. The runtime folder keeps its existing name to preserve model paths. v08 launches on app port **8800** and engine port **8200**, separate from older versions.
+
+For a manually extracted installation (including Google Drive), download **[BobHead-App-v08.zip](https://github.com/jalrobustvfx/BobHead/releases/download/v0.8.0/BobHead-App-v08.zip)**. Extract its contents **inside the existing app folder**, replacing application files, then run **Launch BobHead.cmd**. Existing models and user data are kept. [Update instructions](workflows/README-v08.md).
 
 ## See it in action
 
@@ -87,13 +92,13 @@ The first processed frame and enlarged OpenPose guide create the doll-style refe
 
 ## Source and reproducibility
 
-- [Editable v07 workflow](workflows/BobHead_Comfyui_v07.json) and [compiled app graph](workflows/BobHead_API.json)
+- [Editable v08 workflow](workflows/BobHead_Comfyui_v08.json) and [compiled app graph](workflows/BobHead_API.json)
 - [Custom pose-effect node](custom_nodes/comfyui-pose-effects)
 - [Required nodes](NODE_SETUP.md) and [model downloads](MODELS.md)
 - [Developer setup and packaging](docs/DEVELOPMENT.md)
-- [Recorded runtime versions](environment/installed-packages.txt) and [v07 generation checks](environment/v07-validation.json)
+- [Recorded runtime versions](environment/installed-packages.txt) and [v07 generation checks](environment/v08-validation.json)
 
-The app passes 21 automated checks covering graph compilation, prompt routing, head-size bounds, downloads and launch behavior. The exact release starter also passed a clean-folder test: checksum verification, archive joining/extraction, and the extracted Python, engine and app startup. The bundled v07 runtime exposes every required node type. A real v07 generation was checked for video decoding and source/result audio. Model weights are not packaged.
+The app passes 33 automated checks covering graph compilation, prompt routing, head-size bounds, downloads and launch behavior. The exact release starter also passed a clean-folder test: checksum verification, archive joining/extraction, and the extracted Python, engine and app startup. The shared runtime with the v08 app exposes every required node type. A real v07 generation was checked for video decoding and source/result audio. Model weights are not packaged.
 
 Built for the [ComfyUI open-source competition](https://comfy.org/open-source-higgsfield/).
 

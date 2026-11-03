@@ -23,7 +23,7 @@ function Save-BobHeadDownload([string]$url, [string]$destination, [long]$expecte
         if ($received -gt $expectedBytes) { $received = 0 }
         $offset = $received
         $request = [Net.HttpWebRequest]::Create($url)
-        $request.UserAgent = 'BobHead-Setup-v07'
+        $request.UserAgent = 'BobHead-Setup-v08'
         $request.CachePolicy = New-Object Net.Cache.RequestCachePolicy([Net.Cache.RequestCacheLevel]::NoCacheNoStore)
         $request.Timeout = 30000
         $request.ReadWriteTimeout = 30000
@@ -89,10 +89,75 @@ function Save-BobHeadDownload([string]$url, [string]$destination, [long]$expecte
     }
 }
 
+function Install-BobHeadAppUpdate {
+    if (-not $appUpdate) { return }
+    New-Item -ItemType Directory -Force -Path $cache | Out-Null
+    $updateMarker = Join-Path $appRoot '.app-update-installed'
+    if ((Test-Path -LiteralPath $updateMarker) -and
+        ((Get-Content -LiteralPath $updateMarker -Raw).Trim() -eq $appUpdate.sha256) -and
+        (Test-Path -LiteralPath (Join-Path $appRoot ('workflows\' + $appUpdate.workflow)))) { return }
+    Write-Host ('Updating BobHead to ' + $appUpdate.version + '. Existing models are kept.')
+    $updateZip = Join-Path $cache $appUpdate.archive
+    $updateValid = (Test-Path -LiteralPath $updateZip) -and
+        ((Get-Item -LiteralPath $updateZip).Length -eq $appUpdate.bytes) -and
+        ((Get-BobHeadHash $updateZip) -eq $appUpdate.sha256)
+    if (-not $updateValid) {
+        $updatePartial = $updateZip + '.partial'
+        Save-BobHeadDownload ($appUpdateBaseUrl + '/' + $appUpdate.archive) $updatePartial $appUpdate.bytes 0 $appUpdate.bytes
+        if ((Get-BobHeadHash $updatePartial) -ne $appUpdate.sha256) {
+            [IO.File]::Delete($updatePartial)
+            throw 'The app update checksum did not match. Run this starter again.'
+        }
+        Move-Item -LiteralPath $updatePartial -Destination $updateZip -Force
+    }
+    Add-Type -AssemblyName System.IO.Compression.FileSystem
+    $stage = Join-Path $cache ('app-update-' + $appUpdate.sha256.Substring(0, 12))
+    New-Item -ItemType Directory -Force -Path $stage | Out-Null
+    $stageRoot = [IO.Path]::GetFullPath($stage).TrimEnd('\') + '\'
+    $installRoot = [IO.Path]::GetFullPath($appRoot).TrimEnd('\') + '\'
+    $expected = @{}
+    foreach ($file in $appUpdate.files) { $expected[$file.path] = $file }
+    $zip = [IO.Compression.ZipFile]::OpenRead($updateZip)
+    try {
+        if ($zip.Entries.Count -ne $expected.Count) { throw 'Unexpected files in the app update.' }
+        foreach ($entry in $zip.Entries) {
+            $name = $entry.FullName
+            if (-not $expected.ContainsKey($name)) { throw 'An unlisted file was found in the app update.' }
+            if ($name.Contains(':') -or $name.StartsWith('/') -or $name.StartsWith('\') -or
+                (($name.Replace('\', '/').Split('/')) -contains '..') -or
+                (@('runtime','cache','.data') -contains ($name.Replace('\', '/').Split('/')[0]))) { throw 'Unsafe app update path.' }
+            $target = [IO.Path]::GetFullPath($stageRoot + $name.Replace('/', '\'))
+            $destination = [IO.Path]::GetFullPath($installRoot + $name.Replace('/', '\'))
+            if ((-not $target.StartsWith($stageRoot, [StringComparison]::OrdinalIgnoreCase)) -or
+                (-not $destination.StartsWith($installRoot, [StringComparison]::OrdinalIgnoreCase))) {
+                throw 'An app update path is outside the installation folder.'
+            }
+            [IO.Directory]::CreateDirectory([IO.Path]::GetDirectoryName($target)) | Out-Null
+            [IO.Compression.ZipFileExtensions]::ExtractToFile($entry, $target, $true)
+            $file = $expected[$name]
+            if (((Get-Item -LiteralPath $target).Length -ne $file.bytes) -or
+                ((Get-BobHeadHash $target) -ne $file.sha256)) { throw ('App update verification failed: ' + $name) }
+        }
+    } finally { $zip.Dispose() }
+    # Copy only verified application files. Runtime/model and user-data folders are excluded.
+    foreach ($file in $appUpdate.files) {
+        $source = Join-Path $stage $file.path
+        $target = Join-Path $appRoot $file.path
+        [IO.Directory]::CreateDirectory([IO.Path]::GetDirectoryName($target)) | Out-Null
+        [IO.File]::Copy($source, $target, $true)
+    }
+    Set-Content -LiteralPath $updateMarker -Value $appUpdate.sha256 -Encoding ASCII
+    Write-Host ('BobHead ' + $appUpdate.version + ' is installed.')
+}
+
 $manifest = ConvertFrom-Json @'
 __MANIFEST_JSON__
 '@
 $baseUrl = '__RELEASE_URL__'
+$appUpdate = ConvertFrom-Json @'
+__APP_UPDATE_JSON__
+'@
+$appUpdateBaseUrl = '__APP_UPDATE_URL__'
 $installParent = Split-Path -Parent $env:BOBHEAD_BOOTSTRAP
 $cache = Join-Path $installParent 'BobHead-downloads'
 $appRoot = Join-Path $installParent $manifest.folder
@@ -104,6 +169,7 @@ $runtimeMain = Join-Path $appRoot 'runtime\ComfyUI_windows_portable\ComfyUI\main
 if ((Test-Path -LiteralPath $marker) -and (Test-Path -LiteralPath $launch) -and
     (Test-Path -LiteralPath $runtimePython) -and (Test-Path -LiteralPath $runtimeMain) -and
     ((Get-Content -LiteralPath $marker -Raw).Trim() -eq $manifest.sha256)) {
+    Install-BobHeadAppUpdate
     Write-Host 'Starting your installed BobHead app...'
     & $launch
     exit $LASTEXITCODE
@@ -184,6 +250,7 @@ try {
 if (-not ((Test-Path -LiteralPath $launch) -and (Test-Path -LiteralPath $runtimePython) -and
     (Test-Path -LiteralPath $runtimeMain))) { throw 'The extracted runtime is incomplete.' }
 Set-Content -LiteralPath $marker -Value $manifest.sha256 -Encoding ASCII
+Install-BobHeadAppUpdate
 Write-Host 'Setup complete. Starting BobHead...'
 & $launch
 exit $LASTEXITCODE

@@ -1,0 +1,19 @@
+{
+  "fps": 30.0,
+  "frames": 25,
+  "seconds": 0.8333333333333334,
+  "resolution": [
+    448,
+    800
+  ],
+  "audio_correlation": 0.9860782950013776,
+  "full_decode": "passed",
+  "workflow": "v08",
+  "automated_tests_passed": 33,
+  "nodes": 74,
+  "links_checked": 111,
+  "source": "d_before.mp4",
+  "new_model_downloads_required": false,
+  "main_model_files": 15,
+  "main_model_bytes": 118918295544
+}

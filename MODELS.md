@@ -1,4 +1,6 @@
-# v07 models — download separately
+# v08 models — download separately
+
+V08 uses the same 15 main files as v07; upgrading needs no new main model downloads.
 
 No model weights are packaged. The app installs these files under its bundled ComfyUI `models/` folder.
 

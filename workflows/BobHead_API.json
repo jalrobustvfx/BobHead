@@ -77,13 +77,13 @@
         0
       ],
       "model": [
-        "5138",
+        "5137",
         0
       ],
       "riflex_freq_index": 0,
       "rope_function": "comfy",
       "scheduler": "unipc",
-      "seed": 1107746106914108,
+      "seed": 158865400875856,
       "shift": 5.0,
       "start_step": 0,
       "steps": 5,
@@ -122,8 +122,8 @@
       ],
       "pose_strength": 1.0,
       "ref_images": [
-        "5223",
-        0
+        "5252",
+        1
       ],
       "tiled_vae": false,
       "vae": [
@@ -147,8 +147,8 @@
       "crop": "center",
       "force_offload": true,
       "image_1": [
-        "5223",
-        0
+        "5252",
+        1
       ],
       "ratio": 0.5,
       "strength_1": 1.0,
@@ -160,6 +160,18 @@
     "class_type": "CLIPVisionLoader",
     "inputs": {
       "clip_name": "clip_vision_h.safetensors"
+    }
+  },
+  "5252": {
+    "class_type": "VRAM_Debug",
+    "inputs": {
+      "empty_cache": true,
+      "gc_collect": true,
+      "image_pass": [
+        "5223",
+        0
+      ],
+      "unload_all_models": true
     }
   },
   "5223": {
@@ -189,9 +201,21 @@
     "class_type": "GetImageSize",
     "inputs": {
       "image": [
+        "5251",
+        1
+      ]
+    }
+  },
+  "5251": {
+    "class_type": "VRAM_Debug",
+    "inputs": {
+      "empty_cache": true,
+      "gc_collect": true,
+      "image_pass": [
         "5241",
         0
-      ]
+      ],
+      "unload_all_models": true
     }
   },
   "5241": {
@@ -230,12 +254,29 @@
     "class_type": "ResizeImageMaskNode",
     "inputs": {
       "input": [
-        "5026",
+        "5250",
         0
       ],
       "resize_type": "scale to multiple",
       "resize_type.multiple": 32,
       "scale_method": "area"
+    }
+  },
+  "5250": {
+    "class_type": "ImageResizeKJv2",
+    "inputs": {
+      "crop_position": "center",
+      "device": "cpu",
+      "divisible_by": 2,
+      "height": 813,
+      "image": [
+        "5026",
+        0
+      ],
+      "keep_proportion": "resize",
+      "pad_color": "0, 0, 0",
+      "upscale_method": "nearest-exact",
+      "width": 480
     }
   },
   "5026": {
@@ -747,7 +788,7 @@
       ],
       "sampler_name": "euler",
       "scheduler": "simple",
-      "seed": 791861634586486,
+      "seed": 681091096178277,
       "steps": 25
     }
   },
@@ -810,8 +851,8 @@
     "class_type": "GetImagesFromBatchIndexed",
     "inputs": {
       "images": [
-        "5241",
-        0
+        "5251",
+        1
       ],
       "indexes": "0"
     }
@@ -892,11 +933,11 @@
       "detect_face": "enable",
       "detect_hand": "enable",
       "image": [
-        "5241",
-        0
+        "5251",
+        1
       ],
       "pose_estimator": "dw-ll_ucoco_384_bs5.torchscript.pt",
-      "resolution": 1024,
+      "resolution": 512,
       "scale_stick_for_xinsr_cn": "disable"
     }
   },
@@ -936,8 +977,8 @@
       "extend_right_factor": 1.0,
       "extend_up_factor": 1.0,
       "image": [
-        "5241",
-        0
+        "5251",
+        1
       ],
       "mask": [
         "5191",
@@ -969,8 +1010,8 @@
       "device": "Auto",
       "dino_model": "GroundingDINO_SwinT_OGC (694MB)",
       "image": [
-        "5241",
-        0
+        "5251",
+        1
       ],
       "invert_output": false,
       "mask_blur": 0,
@@ -988,6 +1029,31 @@
       "precision": "bf16",
       "use_cpu_cache": false,
       "verbose": false
+    }
+  },
+  "5137": {
+    "class_type": "WanVideoSetBlockSwap",
+    "inputs": {
+      "block_swap_args": [
+        "5153",
+        0
+      ],
+      "model": [
+        "5138",
+        0
+      ]
+    }
+  },
+  "5153": {
+    "class_type": "WanVideoBlockSwap",
+    "inputs": {
+      "block_swap_debug": false,
+      "blocks_to_swap": 25,
+      "offload_img_emb": false,
+      "offload_txt_emb": false,
+      "prefetch_blocks": 1,
+      "use_non_blocking": true,
+      "vace_blocks_to_swap": 0
     }
   },
   "5138": {

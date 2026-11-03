@@ -1,12 +1,12 @@
 # Developer setup
 
-The current source app uses v07 and the redesigned interface. Connect it to an existing, working ComfyUI server. The latest v0.7.0 Windows standalone release includes the same workflow and interface, with its own Python, ComfyUI and custom nodes.
+The current source app uses v08 and the redesigned interface. Connect it to an existing, working ComfyUI server. The latest v0.8.0 starter reuses the validated model-free v07 runtime and applies the small v08 app update. Existing model files are unchanged.
 
 ## Use an existing ComfyUI
 
 1. Install the 13 required packs in [NODE_SETUP.md](../NODE_SETUP.md), including the bundled `custom_nodes/comfyui-pose-effects` source. Install their requirements into ComfyUI's Python environment.
 2. Obtain the files in [MODELS.md](../MODELS.md) and place them in the indicated ComfyUI model folders. Supporting nodes fetch their own auxiliary models on first use.
-3. Open `workflows/BobHead_Comfyui_v07.json` in ComfyUI, select a local input video, and verify the workflow runs. This is the editable GUI workflow.
+3. Open `workflows/BobHead_Comfyui_v08.json` in ComfyUI, select a local input video, and verify the workflow runs. This is the editable GUI workflow.
 4. With ComfyUI running at `http://127.0.0.1:8188`, install the small app dependency and start the app:
 
 ```powershell
@@ -30,7 +30,7 @@ The v07 API source is retained beside the editable GUI workflow. The nested Qwen
 python -m unittest discover -s tests -v
 ```
 
-These checks cover v07 prompt routing, head-size bounds, graph compilation, launch behavior and downloads without loading the GPU models. A real v07 generation and bundled startup were also validated; see `environment/v07-validation.json`. A real v06 generation was also completed with the included talking clip on an RTX PRO 6000 Blackwell (96 GiB VRAM). The output and input audio correlation was approximately 0.995. See `environment/media-validation.json` for the saved media checks.
+These checks cover v08 prompt routing, head-size bounds, graph compilation, launch behavior and downloads without loading the GPU models. A real v08 generation and bundled startup were also validated; see `environment/v08-validation.json`. A real v06 generation was also completed with the included talking clip on an RTX PRO 6000 Blackwell (96 GiB VRAM). The output and input audio correlation was approximately 0.995. See `environment/media-validation.json` for the saved media checks.
 
 ## Package a standalone runtime
 

@@ -22,7 +22,7 @@ class WorkflowTests(unittest.TestCase):
         self.assertEqual(prompt['5060']['inputs']['video'], 'uploaded.mp4')
         self.assertEqual(prompt['5060']['inputs']['frame_load_cap'], 89)
         self.assertEqual(prompt['5164']['inputs']['num_frames'], ['5194', 2])
-        self.assertEqual(prompt['5194']['inputs']['image'], ['5241', 0])
+        self.assertEqual(prompt['5194']['inputs']['image'], ['5251', 1])
         self.assertEqual(prompt['5164']['inputs']['width'], ['5194', 0])
         self.assertEqual(prompt['5164']['inputs']['height'], ['5194', 1])
         self.assertEqual(prompt['5144']['inputs']['strength_1'], 1)
@@ -34,7 +34,7 @@ class WorkflowTests(unittest.TestCase):
         self.assertEqual(prompt['5214:474']['inputs']['prompt'], self.graph['5214:474']['inputs']['prompt'])
         self.assertEqual(prompt['5214:474']['inputs']['images.image_1'], ['5122', 0])
         self.assertEqual(prompt['5214:474']['inputs']['images.image_2'], ['5244', 0])
-        self.assertEqual(prompt['5164']['inputs']['ref_images'], ['5223', 0])
+        self.assertEqual(prompt['5164']['inputs']['ref_images'], ['5252', 1])
         self.assertNotIn('5214:500', prompt)  # Disabled prompt enhancer stays pruned.
         self.assertNotIn('clown', DEFAULT_PROMPT)
         self.assertEqual(prompt['5136']['inputs']['attention_mode'], 'sdpa')
@@ -48,6 +48,26 @@ class WorkflowTests(unittest.TestCase):
         self.assertEqual(prompt['5165']['inputs']['positive_prompt'], self.graph['5165']['inputs']['positive_prompt'])
         self.assertEqual(prompt['5214:458']['inputs']['steps'], 25)
         self.assertEqual(prompt['5214:451']['inputs']['unet_name'], 'qwen_image_2.1_int8_convrot.safetensors')
+
+    def test_v08_optimizations_are_preserved(self):
+        prompt = build_prompt(self.graph, 'clip.mp4', {'duration': 5}, 'test')
+        self.assertEqual(prompt['5085']['inputs']['input'], ['5250', 0])
+        self.assertEqual(prompt['5250']['inputs']['width'], 480)
+        self.assertEqual(prompt['5250']['inputs']['height'], 813)
+        self.assertEqual(prompt['5108']['inputs']['resolution'], 512)
+        self.assertEqual(prompt['5108']['inputs']['image'], ['5251', 1])
+        self.assertEqual(prompt['5124']['inputs']['images'], ['5251', 1])
+        for key, source in [('5251', '5241'), ('5252', '5223')]:
+            self.assertEqual(prompt[key]['class_type'], 'VRAM_Debug')
+            self.assertEqual(prompt[key]['inputs']['image_pass'], [source, 0])
+            self.assertTrue(prompt[key]['inputs']['empty_cache'])
+            self.assertTrue(prompt[key]['inputs']['gc_collect'])
+            self.assertTrue(prompt[key]['inputs']['unload_all_models'])
+        self.assertEqual(prompt['5153']['inputs']['blocks_to_swap'], 25)
+        self.assertEqual(prompt['5154']['inputs']['seed'], 158865400875856)
+        self.assertEqual(prompt['5214:458']['inputs']['seed'], 681091096178277)
+        self.assertEqual(prompt['5146']['inputs']['image_1'], ['5252', 1])
+        self.assertEqual(prompt['5187']['inputs']['audio'], ['5060', 2])
 
     def test_controls_reject_invalid_values(self):
         for options in [{'duration': 11}, {'duration': 0}]:

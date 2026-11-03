@@ -100,7 +100,7 @@ def build_prompt(template, filename, options, job_id):
     else:
         prompt['bobhead_frame_count'] = {'class_type': 'GetImageSizeAndCount', 'inputs': {'image': ['5088', 0]}}
         prompt['5164']['inputs']['num_frames'] = ['bobhead_frame_count', 3]
-    # Preserve the authored pose settings. In v07, direction edits the Qwen
+    # Preserve the authored pose settings. In v07 and later, direction edits the Qwen
     # reference image; the animation prompt remains exactly as authored.
     prompt[prompt_node]['inputs'][prompt_field] = prompt_text
     prompt[OUTPUT_NODE]['inputs'].update(filename_prefix=f'BobHead/{job_id}', format='video/h264-mp4',

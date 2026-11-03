@@ -5,4 +5,4 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 subprocess.run([sys.executable, str(ROOT / 'tools' / 'compile_workflow.py'),
-                str(ROOT / 'workflows' / 'BobHead_Comfyui_v07.json')], check=True)
+                str(ROOT / 'workflows' / 'BobHead_Comfyui_v08.json')], check=True)

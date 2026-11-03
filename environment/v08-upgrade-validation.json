@@ -1,0 +1,13 @@
+{
+  "status": "passed",
+  "update_version": "v0.8.0",
+  "base_runtime_reused": true,
+  "existing_model_files_unchanged": true,
+  "existing_install_path_with_spaces": true,
+  "repeated_launch": "reuses installed update and services",
+  "bundled_engine_required_nodes": "all available",
+  "main_models": 15,
+  "new_engine_port": 8200,
+  "new_app_port": 8800,
+  "fresh_main_model_download": "not rerun"
+}
