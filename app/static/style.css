@@ -13,3 +13,5 @@ dialog{max-width:550px;width:calc(100% - 36px);padding:34px;background:var(--whi
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
 
 .hero-title{min-width:0}
+
+.processing-estimate{font-size:11px;line-height:1.5;border:1px solid #380c1440;border-radius:7px;background:#ffffff45;padding:12px;margin:18px 0 0;color:var(--ink)}.processing-estimate strong{display:block;margin-bottom:4px}.processing-estimate+.generate{margin-top:12px}
