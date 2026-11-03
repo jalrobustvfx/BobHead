@@ -4,7 +4,7 @@
 
 Turn a short video into a playful doll-style BobHead, preserving the performance and original dialogue.
 
-**[Download Start-BobHead.cmd](https://github.com/jalrobustvfx/BobHead/releases/latest/download/Start-BobHead.cmd)** · **[Installation guide](INSTALL.md)** · **[Before/after example files](example%20files)**
+**[Download Start-BobHead.cmd](https://github.com/jalrobustvfx/BobHead/releases/latest/download/Start-BobHead.cmd)** · **[Alternative: Google Drive ZIP (3.41 GB)](https://drive.google.com/file/d/1AybkXAA47niFAuONsnjIE33zdB76Z3DU/view?usp=sharing)** · **[Installation guide](INSTALL.md)** · **[Before/after example files](example%20files)**
 
 ## Download and launch
 
@@ -18,6 +18,17 @@ Keep the folder together and use the same starter for future launches. Completed
 **[Watch the narrated download, launch and use guide (1:56)](docs/media/download-launch-use.mp4)** — the current interface and one-file Windows installation, with Higgsfield's Archie voiceover.
 
 [![BobHead v07 installation and usage walkthrough](docs/screenshots/v07-voiced-guide.jpg)](docs/media/download-launch-use.mp4)
+
+## Alternative download: Google Drive
+
+If the starter download fails or stalls, **[download the complete v07 app ZIP from Google Drive](https://drive.google.com/file/d/1AybkXAA47niFAuONsnjIE33zdB76Z3DU/view?usp=sharing)** (about **3.41 GB**).
+
+1. Download `BobHead-Standalone-v07.zip` and choose **Extract All**.
+2. Open the extracted `BobHead-Standalone-v07` folder.
+3. Double-click **Launch BobHead.cmd**. Python, ComfyUI and custom nodes are included.
+4. In the app, click **Download required models** and wait for all 15 main files to show **Installed**. The ZIP excludes model weights, so model downloads still require Internet access.
+
+Keep the extracted folder together and use **Launch BobHead.cmd** for future launches.
 
 ## What's new in v07
 

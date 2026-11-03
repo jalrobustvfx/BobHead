@@ -2,6 +2,10 @@
 
 **[Watch the 1:56 narrated walkthrough](docs/media/download-launch-use.mp4)** — the new interface, one-file installation, model setup and first video.
 
+## Alternative: download the complete ZIP
+
+If **Start-BobHead.cmd** cannot download the runtime, **[download the v07 ZIP from Google Drive](https://drive.google.com/file/d/1AybkXAA47niFAuONsnjIE33zdB76Z3DU/view?usp=sharing)** (about **3.41 GB**). Choose **Extract All**, open `BobHead-Standalone-v07`, and double-click **Launch BobHead.cmd**. This launches the included app and ComfyUI directly. Then continue with **3. Download models once** below. Model weights are not included in the ZIP.
+
 ## 1. Get the starter
 
 Open the [latest Windows release](https://github.com/jalrobustvfx/BobHead/releases/latest). Under **Assets**, download **Start-BobHead.cmd** into a new, empty folder on the drive where you want to install BobHead. The starter downloads the large `.part` files automatically; you only download the starter yourself.
