@@ -1,6 +1,6 @@
 # BobHead jury demo on Comfy API
 
-Status: the optional cloud gateway is implemented and tested against a simulated provider. The Comfy v2 Linux build completed successfully. This validates packaging, not a completed GPU generation. A real GPU smoke test and web-host deployment are still required. There is no public live demo URL yet. The Windows launcher continues to use the local engine.
+Status: the Render gateway and Comfy v2 Linux deployment are live. A real one-second creator sample completed in 138 seconds, and its MP4, original audio, password login, upload and unauthenticated API rejection were verified. See [cloud validation](environment/cloud-validation.json). Jury access details are shared privately; API keys and the demo password are not stored in this repository. The Windows launcher continues to use the local engine.
 
 ## Two services
 
@@ -17,7 +17,7 @@ Pin the tested dependencies before publishing a release. Test the build on Linux
 
 Use a Docker web service with `Dockerfile.cloud`, one instance and one Python process. Provide HTTPS and a persistent writable volume mounted at `/data`, The container initializes the disk directory, then drops to UID 10001 before starting the app. In-memory locks are deliberately limited to a single gateway process; do not run multiple replicas.
 
-Set all values from `.env.example` in the host's private environment settings. `COMFY_BASE_URL` is the HTTPS deployment origin provided by Comfy. `COMFY_API_KEY` stays on this server. Never put it in browser JavaScript, URLs, screenshots or Git. Choose a demo password of at least 12 characters and a random session secret of at least 32 characters. Changing the session secret invalidates existing sessions. On Render, the app uses the platform-provided `RENDER_EXTERNAL_URL` automatically. For another host or a custom domain, set `BOBHEAD_PUBLIC_ORIGIN` to the exact public HTTPS origin, without a path. The reverse proxy must preserve that Host header. Use `/healthz` as the health check.
+Use `.env.example` as a configuration checklist for the host's private environment settings. On Render, leave `BOBHEAD_PUBLIC_ORIGIN` unset unless using a custom domain; `RENDER_EXTERNAL_URL` supplies the default origin. `COMFY_BASE_URL` is the HTTPS deployment origin provided by Comfy. `COMFY_API_KEY` stays on this server. Never put it in browser JavaScript, URLs, screenshots or Git. Choose a demo password of at least 12 characters and a random session secret of at least 32 characters. Changing the session secret invalidates existing sessions. On Render, the app uses the platform-provided `RENDER_EXTERNAL_URL` automatically. For another host or a custom domain, set `BOBHEAD_PUBLIC_ORIGIN` to the exact public HTTPS origin, without a path. The reverse proxy must preserve that Host header. Use `/healthz` as the health check.
 
 The service listens on `PORT` (default 8787). The app does not load `.env` automatically. Install `requirements-cloud.txt` and FFmpeg if hosting without Docker, then run `python app/server.py --backend comfy-api` with the same environment settings.
 
@@ -45,4 +45,4 @@ Use the public Git repository `https://github.com/jalrobustvfx/BobHead`, branch 
 
 Configure `COMFY_BASE_URL`, `COMFY_API_KEY`, `BOBHEAD_DEMO_PASSWORD` and `BOBHEAD_SESSION_SECRET` privately before deployment. The Docker image sets the backend, host, data directory and default port. `PORT` supplied by Render takes precedence. Set `BOBHEAD_MAX_JOBS_PER_DAY=3` for the initial demo test; increase it intentionally after checking actual usage. App limits do not enforce a dollar spending cap.
 
-The Comfy deployment proposal uses the v2 Linux artifact, an RTX PRO 6000 96 GB, zero always-warm workers, a maximum of one worker, a one-minute idle timeout and United States location. It has not been created. Render and Comfy activation require confirmation of recurring charges and an initial test budget.
+The Comfy deployment proposal uses the v2 Linux artifact, an RTX PRO 6000 96 GB, zero always-warm workers, a maximum of one worker, a one-minute idle timeout and United States location. These settings were used for the validated deployment, after the owner approved recurring costs and an initial GPU test budget.

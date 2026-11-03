@@ -1,0 +1,30 @@
+{
+  "requested_duration_seconds": 1,
+  "head_scale": 1.7,
+  "elapsed_seconds": 138,
+  "output_bytes": 216528,
+  "decoded_frames": 25,
+  "fps": 30.0,
+  "resolution": [
+    448,
+    800
+  ],
+  "video_seconds": 0.8333333333333334,
+  "video_codec": "h264",
+  "full_decode_passed": true,
+  "audio_samples_compared": 13333,
+  "original_audio_correlation": 0.999712604381769,
+  "checked_at_utc": "2026-11-03T09:31:16.145614+00:00",
+  "workflow": "v08",
+  "backend": "Comfy API v2 / comfy-sdk 0.5.0",
+  "gateway_host": "Render Docker web service",
+  "gpu": "RTX PRO 6000 96 GB",
+  "automated_tests_passed": 41,
+  "unauthenticated_api_status": 401,
+  "login_and_upload_verified": true,
+  "mp4_download_verified": true,
+  "minimum_workers": 0,
+  "maximum_workers": 1,
+  "idle_timeout_seconds": 60,
+  "actual_idle_worker_count": "Not exposed by the deployment dashboard; scale-to-zero configuration verified."
+}

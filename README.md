@@ -92,7 +92,7 @@ The first processed frame and enlarged OpenPose guide create the doll-style refe
 
 ## Optional cloud hosting
 
-An opt-in Comfy API gateway is being prepared for a private jury demo. It keeps the same interface and runs generation on a remote GPU. See [cloud hosting setup and current limitations](CLOUD-HOSTING.md). The Linux build is ready; it still needs a paid GPU smoke test and a web host before a live link can be shared.
+An optional Comfy API gateway keeps the same interface and runs generation on a remote GPU. The private jury deployment passed a real video generation, original-audio and download check. See [cloud hosting setup and limits](CLOUD-HOSTING.md) and [validation results](environment/cloud-validation.json). Access credentials are shared privately.
 
 ## Source and reproducibility
 
