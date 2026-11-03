@@ -1,6 +1,6 @@
 # BobHead jury demo on Comfy API
 
-Status: the Render gateway and Comfy v2 Linux deployment are live. A real one-second creator sample completed in 138 seconds, and its MP4, original audio, password login, upload and unauthenticated API rejection were verified. See [cloud validation](environment/cloud-validation.json). Jury access details are shared privately; API keys and the demo password are not stored in this repository. The Windows launcher continues to use the local engine.
+Status: the Render gateway and Comfy v2 Linux deployment are live. A real one-second creator sample completed in 138 seconds, and its MP4, original audio, password login, upload and unauthenticated API rejection were verified. See [cloud validation](environment/cloud-validation.json). Passwordless access is enabled on the hosted jury demo, with separate visitor sessions and a shared three-generation limit per rolling 24 hours. API keys remain in private server settings. See [public-access validation](environment/public-access-validation.json). The Windows launcher continues to use the local engine.
 
 ## Two services
 
@@ -49,4 +49,4 @@ The Comfy deployment proposal uses the v2 Linux artifact, an RTX PRO 6000 96 GB,
 
 ## Optional passwordless access
 
-`BOBHEAD_PUBLIC_DEMO=true` opens the studio without a password. This is public access: anyone who discovers the URL can use the shared paid-generation quota. The default remains password-protected until the owner explicitly enables this setting. A session secret is still required. Visitors receive separate signed cookies, so one visitor cannot view another visitor's uploads or results. Original signed-in sessions keep their existing files. Restoring `BOBHEAD_PUBLIC_DEMO=false` rejects anonymous sessions immediately. The rolling global generation limit and single-active-job limit continue to apply; the daily limit is not a dollar spending cap.
+`BOBHEAD_PUBLIC_DEMO=true` opens the studio without a password. This is public access: anyone who discovers the URL can use the shared paid-generation quota. Self-hosted copies remain password-protected by default. The owner explicitly enabled this setting on the hosted jury demo. A session secret is still required. Visitors receive separate signed cookies, so one visitor cannot view another visitor's uploads or results. Original signed-in sessions keep their existing files. Restoring `BOBHEAD_PUBLIC_DEMO=false` rejects anonymous sessions immediately. The rolling global generation limit and single-active-job limit continue to apply; the daily limit is not a dollar spending cap.

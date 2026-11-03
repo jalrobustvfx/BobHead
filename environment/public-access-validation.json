@@ -1,0 +1,17 @@
+{
+  "checked_at_utc": "2026-11-03T09:42:50.375861+00:00",
+  "passwordless_home_status": 200,
+  "fresh_visitor_cookie": true,
+  "distinct_visitor_sessions": true,
+  "secure_httponly_samesite_cookie": true,
+  "signed_in_api_status": 200,
+  "cloud_connected": true,
+  "visitor_upload_status": 200,
+  "own_upload_matches_source": true,
+  "other_visitor_upload_status": 404,
+  "old_private_job_status": 404,
+  "cross_origin_submit_status": 403,
+  "login_redirect": "/",
+  "paid_jobs_submitted": 0,
+  "automated_tests_passed": 45
+}
