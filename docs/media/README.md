@@ -1,14 +1,13 @@
 # Demonstration media
 
-All current examples use the creator's own supplied `Me01.mp4` footage.
+The main README displays five new before/after GIF previews: `a-before-after.gif`, `b-before-after.gif`, `c-before-after.gif`, `d-before-after.gif`, and `e-before-after.gif`. Their full-resolution supplied video pairs are in [exmaples files](../../exmaples%20files).
 
-- `before.mp4`: the original source video with audio.
-- `after.mp4`: the actual BobHead v06 output, with source audio.
-- `before-after.mp4`: original on the left, BobHead result on the right, with result audio.
-- `me-before-after.gif`: a silent looping preview of that comparison.
-- `how-to-use-me.mp4`: the new 1 minute 55 second narrated walkthrough, using fresh app/GitHub captures and instructional cards. It includes audible source and result playback. Setup and generation waits are skipped.
-- `how-to-use-me.srt` and `how-to-use-me-transcript.txt`: captions and transcript.
+- A: retaining the guitar/props.
+- B: retaining body movement.
+- C: general doll-style output.
+- D: retaining head accessories (the creator with hat and glasses).
+- E: retaining facial expressions.
 
-The source and result are also available in the [example files folder](../../exmaples%20files) for jury testing. The app screenshot shows this same generation.
+The old `me-before-after.gif` preview has been removed. `before.mp4` and `after.mp4` now mirror pair D for existing test-download links. The older `before-after.mp4` comparison and `how-to-use-me` walkthrough files remain historical v06 demonstration media; the main README uses the five new previews.
 
-The creator supplied this footage for demonstration. The software's MIT license applies to the code; no general redistribution license for personal footage is granted here.
+These files were supplied by the creator for this demonstration. Media is separate from the software MIT license; no general redistribution license for footage is granted here.

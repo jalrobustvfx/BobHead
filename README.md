@@ -12,13 +12,41 @@ The current source app uses **v07**, including a Qwen Image 2.1 stage that creat
 
 Model setup now lists **15 files, approximately 118.9 GB** total. The three new Qwen files add approximately **17.3 GB**. See [model downloads](MODELS.md).
 
-The interface shown above and the source app are v07. The downloadable Windows **v0.6.0 release** and the older walkthrough/examples below describe v06. To use the latest interface and workflow, follow the [v07 source setup](docs/DEVELOPMENT.md).
+The interface shown above and the source app are v07. The downloadable Windows **v0.6.0 release** and the older installation walkthrough describe v06. To use the latest interface and workflow, follow the [v07 source setup](docs/DEVELOPMENT.md).
 
 ## See it in action
 
-[![Your original footage alongside the BobHead result](docs/media/me-before-after.gif)](docs/media/before-after.mp4)
+Original footage on the left; BobHead on the right. These silent previews loop automatically. Download each pair to try the source clip or inspect the full result.
 
-The creator's own footage: original on the left, enlarged-head result on the right. The GIF loops silently; **[watch the comparison with sound](docs/media/before-after.mp4)**.
+### Props: the guitar stays in the performance
+
+![Props: the guitar stays in the performance — before and after](docs/media/a-before-after.gif)
+
+[Before MP4](exmaples%20files/a_before.mp4) · [After MP4](exmaples%20files/a_after.mp4)
+
+### Body movement: keep the moves
+
+![Body movement: keep the moves — before and after](docs/media/b-before-after.gif)
+
+[Before MP4](exmaples%20files/b_before.mp4) · [After MP4](exmaples%20files/b_after.mp4)
+
+### Facial expressions: big feelings
+
+![Facial expressions: big feelings — before and after](docs/media/e-before-after.gif)
+
+[Before MP4](exmaples%20files/e_before.mp4) · [After MP4](exmaples%20files/e_after.mp4)
+
+### Accessories: hat and glasses
+
+![Accessories: hat and glasses — before and after](docs/media/d-before-after.gif)
+
+[Before MP4](exmaples%20files/d_before.mp4) · [After MP4](exmaples%20files/d_after.mp4)
+
+### The BobHead transformation
+
+![The BobHead transformation — before and after](docs/media/c-before-after.gif)
+
+[Before MP4](exmaples%20files/c_before.mp4) · [After MP4](exmaples%20files/c_after.mp4)
 
 **[Download the Windows app](https://github.com/jalrobustvfx/BobHead/releases/latest)** · **[Download before and after example files](exmaples%20files)** · **[Watch the tutorial on YouTube](https://youtu.be/cc84p_qUgdo)**
 
@@ -75,7 +103,7 @@ The current source app uses workflow **v07**. The head-size slider drives the cu
 - [Developer setup, validation, and packaging](docs/DEVELOPMENT.md)
 - [Recorded dependency versions](environment/installed-packages.txt) and [source inventory](environment/source-versions.json)
 
-The app's automated checks cover v07 prompt routing, graph connections, downloads, and launch behavior. The included result was generated with the bundled v06 runtime, and the current example was checked for video decoding and source/result audio. The complete first-time model download has not been rerun from an empty model folder.
+The app's automated checks cover v07 prompt routing, graph connections, downloads, and launch behavior. The five example pairs above were supplied for this update. A real v07 generation was also validated; see `environment/v07-validation.json`. The complete first-time model download has not been rerun from an empty model folder.
 
 ## Credits and licensing
 
