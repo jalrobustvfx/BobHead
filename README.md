@@ -71,6 +71,8 @@ Original footage on the left; BobHead on the right. These silent previews loop a
 
 [Before MP4](example%20files/c_before.mp4) · [After MP4](example%20files/c_after.mp4)
 
+## Troubleshooting
+
 **Startup error about an older BobHead or a busy port?** Follow the [port-conflict troubleshooting steps](INSTALL.md#an-older-bobhead-v06-is-running-on-this-port).
 
 ## Requirements
