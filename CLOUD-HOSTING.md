@@ -46,3 +46,7 @@ Use the public Git repository `https://github.com/jalrobustvfx/BobHead`, branch 
 Configure `COMFY_BASE_URL`, `COMFY_API_KEY`, `BOBHEAD_DEMO_PASSWORD` and `BOBHEAD_SESSION_SECRET` privately before deployment. The Docker image sets the backend, host, data directory and default port. `PORT` supplied by Render takes precedence. Set `BOBHEAD_MAX_JOBS_PER_DAY=3` for the initial demo test; increase it intentionally after checking actual usage. App limits do not enforce a dollar spending cap.
 
 The Comfy deployment proposal uses the v2 Linux artifact, an RTX PRO 6000 96 GB, zero always-warm workers, a maximum of one worker, a one-minute idle timeout and United States location. These settings were used for the validated deployment, after the owner approved recurring costs and an initial GPU test budget.
+
+## Optional passwordless access
+
+`BOBHEAD_PUBLIC_DEMO=true` opens the studio without a password. This is public access: anyone who discovers the URL can use the shared paid-generation quota. The default remains password-protected until the owner explicitly enables this setting. A session secret is still required. Visitors receive separate signed cookies, so one visitor cannot view another visitor's uploads or results. Original signed-in sessions keep their existing files. Restoring `BOBHEAD_PUBLIC_DEMO=false` rejects anonymous sessions immediately. The rolling global generation limit and single-active-job limit continue to apply; the daily limit is not a dollar spending cap.

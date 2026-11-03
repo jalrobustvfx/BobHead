@@ -1,6 +1,6 @@
 async function apiFetch(...args) {
   const response = await fetch(...args);
-  if(response.status === 401) { window.location.assign('/login'); throw new Error('Please sign in to continue.'); }
+  if(response.status === 401) { window.location.assign('/'); throw new Error('Please sign in to continue.'); }
   return response;
 }
 const $ = id => document.getElementById(id);

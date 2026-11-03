@@ -57,15 +57,17 @@ async def inspect_video(path):
 
 def create_cloud_app(backend=None, data_dir=None, public_origin=None, password=None,
                      session_secret=None, max_jobs=10, probe_video=inspect_video,
-                     poll_interval=2):
+                     poll_interval=2, public_demo=False):
     origin = (public_origin or '').rstrip('/')
     if origin:
         parsed = urlsplit(origin)
         if (parsed.scheme != 'https' or not parsed.hostname or parsed.username or parsed.password
                 or parsed.path or parsed.query or parsed.fragment):
             raise ValueError('BOBHEAD_PUBLIC_ORIGIN must be the HTTPS origin of your web app.')
-        if not password or len(password) < 12 or not session_secret or len(session_secret) < 32:
-            raise ValueError('Public cloud mode requires a demo password (12+ characters) and session secret (32+ characters).')
+        if not session_secret or len(session_secret) < 32:
+            raise ValueError('Public cloud hosting requires a session secret (32+ characters).')
+        if not public_demo and (not password or len(password) < 12):
+            raise ValueError('Password-protected cloud hosting requires a demo password (12+ characters).')
     if not 1 <= max_jobs <= 100:
         raise ValueError('The demo job limit must be between 1 and 100 per 24 hours.')
     password = password or ''
@@ -92,12 +94,21 @@ def create_cloud_app(backend=None, data_dir=None, public_origin=None, password=N
         return sum(p.stat().st_size for p in data_dir.rglob('*') if p.is_file())
 
     def owner(request):
-        if not password:
+        if request.get('public_visitor'):
+            return request['public_visitor']
+        if not password and not public_demo:
             return 'local-preview'
         value = request.cookies.get('bobhead_session', '')
         try:
-            identity, expiry, signature = value.split('.')
-            body = (identity + '.' + expiry).encode()
+            parts = value.split('.')
+            if len(parts) == 4:
+                # Anonymous cookies stop working immediately if password mode is restored.
+                if not public_demo or parts[2] != 'public':
+                    return None
+            elif len(parts) != 3:
+                return None
+            identity, expiry, signature = parts[0], parts[1], parts[-1]
+            body = '.'.join(parts[:-1]).encode()
             if (len(identity) != 32 or not all(c in '0123456789abcdef' for c in identity)
                     or int(expiry) < time.time() or
                     not hmac.compare_digest(signature, hmac.new(secret, body, hashlib.sha256).hexdigest())):
@@ -120,13 +131,22 @@ def create_cloud_app(backend=None, data_dir=None, public_origin=None, password=N
         expected_origin = origin or f'{request.scheme}://{request.host}'
         if request.method != 'GET' and request.headers.get('Origin', expected_origin) != expected_origin:
             return web.json_response({'error': 'This request came from another website.'}, status=403)
+        new_visitor_cookie = None
+        if public_demo and not owner(request) and request.method == 'GET' and request.path == '/':
+            # Each visitor gets private uploads/results, even without a password.
+            request['public_visitor'] = secrets.token_hex(16)
+            body = request['public_visitor'] + '.' + str(int(time.time() + 12 * 3600)) + '.public'
+            new_visitor_cookie = body + '.' + hmac.new(secret, body.encode(), hashlib.sha256).hexdigest()
         public = request.path in {'/login', '/static/style.css'}
         if not public and not owner(request):
             if request.path.startswith('/api/'):
-                return web.json_response({'error': 'Please sign in to continue.'}, status=401)
-            raise web.HTTPFound('/login')
+                return web.json_response({'error': 'Open BobHead to start your session.' if public_demo else 'Please sign in to continue.'}, status=401)
+            raise web.HTTPFound('/' if public_demo else '/login')
         try:
             result = await handler(request)
+            if new_visitor_cookie:
+                result.set_cookie('bobhead_session', new_visitor_cookie, httponly=True,
+                                  secure=bool(origin), samesite='Strict', max_age=12 * 3600)
             result.headers.setdefault('Cache-Control', 'no-store')
             result.headers['X-Content-Type-Options'] = 'nosniff'
             result.headers['Referrer-Policy'] = 'same-origin'
@@ -266,6 +286,8 @@ def create_cloud_app(backend=None, data_dir=None, public_origin=None, password=N
     app.on_cleanup.append(cleanup)
 
     async def login(request):
+        if public_demo:
+            raise web.HTTPFound('/')
         message = ''
         if request.method == 'POST':
             if request.content_length and request.content_length > 4096:

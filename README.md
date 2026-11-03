@@ -102,7 +102,7 @@ An optional Comfy API gateway keeps the same interface and runs generation on a 
 - [Developer setup and packaging](docs/DEVELOPMENT.md)
 - [Recorded runtime versions](environment/installed-packages.txt) and [v07 generation checks](environment/v08-validation.json)
 
-The app passes 41 automated checks covering graph compilation, prompt routing, head-size bounds, downloads and launch behavior. The exact release starter also passed a clean-folder test: checksum verification, archive joining/extraction, and the extracted Python, engine and app startup. The shared runtime with the v08 app exposes every required node type. A real v07 generation was checked for video decoding and source/result audio. Model weights are not packaged.
+The app passes 45 automated checks covering graph compilation, prompt routing, head-size bounds, downloads and launch behavior. The exact release starter also passed a clean-folder test: checksum verification, archive joining/extraction, and the extracted Python, engine and app startup. The shared runtime with the v08 app exposes every required node type. A real v07 generation was checked for video decoding and source/result audio. Model weights are not packaged.
 
 Built for the [ComfyUI open-source competition](https://comfy.org/open-source-higgsfield/).
 

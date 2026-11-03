@@ -399,7 +399,8 @@ if __name__ == '__main__':
         application = create_cloud_app(data_dir=os.environ.get('BOBHEAD_DATA_DIR'),
             public_origin=public_origin, password=os.environ.get('BOBHEAD_DEMO_PASSWORD'),
             session_secret=os.environ.get('BOBHEAD_SESSION_SECRET'),
-            max_jobs=int(os.environ.get('BOBHEAD_MAX_JOBS_PER_DAY', '10')))
+            max_jobs=int(os.environ.get('BOBHEAD_MAX_JOBS_PER_DAY', '10')),
+            public_demo=os.environ.get('BOBHEAD_PUBLIC_DEMO', '').lower() == 'true')
     else:
         if args.host not in ('127.0.0.1', 'localhost', '::1'):
             parser.error('Local ComfyUI mode only binds to localhost. Use the protected cloud gateway for public hosting.')
