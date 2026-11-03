@@ -92,7 +92,7 @@ The first processed frame and enlarged OpenPose guide create the doll-style refe
 
 ## Optional cloud hosting
 
-An optional Comfy API gateway keeps the same interface and runs generation on a remote GPU. The private jury deployment passed a real video generation, original-audio and download check. See [cloud hosting setup and limits](CLOUD-HOSTING.md) and [validation results](environment/cloud-validation.json). The hosted jury demo opens without a password, retains separate visitor files, and shares a three-generation daily limit.
+An optional Comfy API gateway keeps the same interface and runs generation on a remote GPU. The private jury deployment passed a real video generation, original-audio and download check. See [cloud hosting setup and limits](CLOUD-HOSTING.md) and [validation results](environment/cloud-validation.json). The hosted jury demo opens without a password, retains separate visitor files, and shares a ten-generation daily limit.
 
 ## Source and reproducibility
 

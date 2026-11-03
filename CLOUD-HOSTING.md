@@ -1,6 +1,6 @@
 # BobHead jury demo on Comfy API
 
-Status: the Render gateway and Comfy v2 Linux deployment are live. A real one-second creator sample completed in 138 seconds, and its MP4, original audio, password login, upload and unauthenticated API rejection were verified. See [cloud validation](environment/cloud-validation.json). Passwordless access is enabled on the hosted jury demo, with separate visitor sessions and a shared three-generation limit per rolling 24 hours. API keys remain in private server settings. See [public-access validation](environment/public-access-validation.json). The Windows launcher continues to use the local engine.
+Status: the Render gateway and Comfy v2 Linux deployment are live. A real one-second creator sample completed in 138 seconds, and its MP4, original audio, password login, upload and unauthenticated API rejection were verified. See [cloud validation](environment/cloud-validation.json). Passwordless access is enabled on the hosted jury demo, with separate visitor sessions and a shared ten-generation limit per rolling 24 hours. API keys remain in private server settings. See [public-access validation](environment/public-access-validation.json). The Windows launcher continues to use the local engine.
 
 ## Two services
 
@@ -43,7 +43,7 @@ References: [Comfy API deployment and billing](https://support.comfy.org/article
 
 Use the public Git repository `https://github.com/jalrobustvfx/BobHead`, branch `main`, Docker runtime and Dockerfile path `./Dockerfile.cloud`, with the repository root as the build context. Choose one `0.5c-512mb` instance, a 1 GB persistent disk mounted at `/data`, and health check `/healthz`. Disable automatic deploys for this jury demo. No database or separate worker service is needed.
 
-Configure `COMFY_BASE_URL`, `COMFY_API_KEY`, `BOBHEAD_DEMO_PASSWORD` and `BOBHEAD_SESSION_SECRET` privately before deployment. The Docker image sets the backend, host, data directory and default port. `PORT` supplied by Render takes precedence. Set `BOBHEAD_MAX_JOBS_PER_DAY=3` for the initial demo test; increase it intentionally after checking actual usage. App limits do not enforce a dollar spending cap.
+Configure `COMFY_BASE_URL`, `COMFY_API_KEY`, `BOBHEAD_DEMO_PASSWORD` and `BOBHEAD_SESSION_SECRET` privately before deployment. The Docker image sets the backend, host, data directory and default port. `PORT` supplied by Render takes precedence. The hosted jury demo uses `BOBHEAD_MAX_JOBS_PER_DAY=10`, shared across visitors per rolling 24 hours. App limits do not enforce a dollar spending cap.
 
 The Comfy deployment proposal uses the v2 Linux artifact, an RTX PRO 6000 96 GB, zero always-warm workers, a maximum of one worker, a one-minute idle timeout and United States location. These settings were used for the validated deployment, after the owner approved recurring costs and an initial GPU test budget.
 
