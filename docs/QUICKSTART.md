@@ -47,6 +47,38 @@ Keep the installation folder together. Completed setup is reused on later launch
 - **A runtime download stops:** run the same starter again; verified complete parts are reused and partial runtime files resume where they stopped.
 - **The engine does not start:** check the startup logs under the app's `.data/logs` folder and confirm your NVIDIA driver is compatible.
 
+### “An older BobHead (v06) is running on this port”
+
+An older BobHead app is still running in the background on the port needed by v07. Closing the browser tab does not stop that background process.
+
+**Simplest option:** save your work, restart the computer, then launch only **BobHead v07**.
+
+To stop just the old app without restarting:
+
+1. Open **PowerShell** and find the process listening on the bundled app's default port, **8790**:
+
+   ```powershell
+   Get-NetTCPConnection -LocalPort 8790 -State Listen |
+     Select-Object LocalPort, OwningProcess
+   ```
+
+2. Replace `12345` below with the number shown under **OwningProcess**. Inspect its launch command to confirm that it belongs to the older BobHead installation:
+
+   ```powershell
+   Get-CimInstance Win32_Process -Filter "ProcessId = 12345" |
+     Select-Object ProcessId, Name, CommandLine
+   ```
+
+3. If it is the old BobHead Python server, stop that specific process:
+
+   ```powershell
+   Stop-Process -Id 12345
+   ```
+
+4. Run **Launch BobHead.cmd** from the v07 folder again.
+
+If access is denied, open PowerShell as administrator and repeat the steps. Stop only the confirmed old BobHead process; do not stop every Python process. If the port query returns no listener, try the v07 launcher again. This error concerns the app port; you do not need to stop ComfyUI just to free port 8790.
+
 The exact starter passed a clean-folder installation test on this computer, including checksum verification, extraction and startup of the freshly extracted app and engine. A separate-machine installation and the complete fresh model download have not been rerun.
 
 ## Source code

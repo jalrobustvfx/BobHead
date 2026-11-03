@@ -71,6 +71,8 @@ Original footage on the left; BobHead on the right. These silent previews loop a
 
 [Before MP4](example%20files/c_before.mp4) · [After MP4](example%20files/c_after.mp4)
 
+**Startup error about an older BobHead or a busy port?** Follow the [port-conflict troubleshooting steps](INSTALL.md#an-older-bobhead-v06-is-running-on-this-port).
+
 ## Requirements
 
 Windows 10/11, an NVIDIA CUDA GPU with a compatible driver, reliable Internet for setup, and space for the runtime, 118.9 GB main models, supporting models, temporary files and outputs. The demonstrated setup uses an **RTX PRO 6000 Blackwell with 96 GiB VRAM**. Minimum VRAM is not established. A separate-machine installation and the complete fresh model download have not been validated.
