@@ -85,6 +85,29 @@ class GatewayTests(unittest.IsolatedAsyncioTestCase):
         self.assertNotIn('SECRET', json.dumps(state))
         response = await self.client.post('/api/jobs', json=payload)
         self.assertEqual(response.status, 400)
+    async def test_generation_audit_reports_completion_without_private_inputs(self):
+        upload = await self.upload()
+        with self.assertLogs('bobhead.generations', level='INFO') as captured:
+            response = await self.client.post('/api/jobs', json={
+                'upload_id': upload['upload_id'], 'duration': 3, 'prompt': 'PRIVATE-PROMPT'})
+            job = await response.json()
+            for _ in range(100):
+                state = await (await self.client.get('/api/jobs/' + job['id'])).json()
+                if state['status'] == 'complete':
+                    break
+                await asyncio.sleep(.01)
+        entries = [json.loads(record.getMessage()) for record in captured.records]
+        self.assertEqual(entries[0]['status'], 'starting')
+        self.assertEqual(entries[-1]['status'], 'complete')
+        self.assertEqual(entries[-1]['clip_seconds'], 3)
+        self.assertIn('elapsed_seconds', entries[-1])
+        for entry in entries:
+            self.assertEqual(entry['job_id'], job['id'])
+            self.assertLessEqual(set(entry), {'event', 'job_id', 'status', 'created_at',
+                                            'clip_seconds', 'head_scale', 'elapsed_seconds'})
+        self.assertNotIn('PRIVATE-PROMPT', str(captured.output))
+        self.assertNotIn('remote-private-id', str(captured.output))
+
     async def test_wrong_origin_and_host_are_rejected(self):
         response = await self.client.post('/api/jobs', json={}, headers={'Origin':'https://attacker.example'})
         self.assertEqual(response.status, 403)

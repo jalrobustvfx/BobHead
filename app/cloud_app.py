@@ -5,6 +5,8 @@ import hashlib
 import hmac
 import html
 import json
+import logging
+from datetime import datetime, timezone
 import os
 from pathlib import Path
 import secrets
@@ -84,11 +86,36 @@ def create_cloud_app(backend=None, data_dir=None, public_origin=None, password=N
     storage_lock, submit_lock = asyncio.Lock(), asyncio.Lock()
     failed_logins = deque(maxlen=100)
 
+    # A dedicated logger keeps SDK output, cookies and visitor data out of audit entries.
+    audit = logging.getLogger('bobhead.generations')
+    if not audit.handlers:
+        handler = logging.StreamHandler()
+        handler.setFormatter(logging.Formatter('%(message)s'))
+        audit.addHandler(handler)
+    audit.setLevel(logging.INFO)
+    audit.propagate = False
+    logged_states = {}
+
+    def log_job(job, event='generation_status'):
+        state = (job['status'], job.get('stage'), job.get('remote_id'))
+        if event == 'generation_status' and logged_states.get(job['id']) == state:
+            return
+        logged_states[job['id']] = state
+        options = job.get('options', {})
+        entry = {'event': event, 'job_id': job['id'], 'status': job['status'],
+                 'created_at': datetime.fromtimestamp(job['created'], timezone.utc).isoformat(),
+                 'clip_seconds': options.get('duration'), 'head_scale': options.get('head_size')}
+        if job.get('completed'):
+            entry['elapsed_seconds'] = round(job['completed'] - job['created'], 1)
+        audit.info(json.dumps(entry))
+
+
     def write_job(job):
         path = data_dir / 'jobs' / (job['id'] + '.json')
         temp = path.with_suffix('.tmp')
         temp.write_text(json.dumps(job))
         temp.replace(path)
+        log_job(job)
 
     def storage_used():
         return sum(p.stat().st_size for p in data_dir.rglob('*') if p.is_file())
@@ -261,6 +288,7 @@ def create_cloud_app(backend=None, data_dir=None, public_origin=None, password=N
                         (data_dir / 'results' / (identity + '.mp4')).unlink(missing_ok=True)
                         (data_dir / 'jobs' / (identity + '.json')).unlink(missing_ok=True)
                         jobs.pop(identity, None)
+                        logged_states.pop(identity, None)
             await asyncio.sleep(600)
 
     async def startup(_):
@@ -273,6 +301,7 @@ def create_cloud_app(backend=None, data_dir=None, public_origin=None, password=N
         for p in (data_dir / 'jobs').glob('*.json'):
             job = json.loads(p.read_text())
             jobs[job['id']] = job
+            log_job(job, 'generation_restored')
             if job['status'] in ACTIVE and backend.configured:
                 add_task(monitor(job))
         add_task(collect_old_files())

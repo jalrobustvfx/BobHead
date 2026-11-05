@@ -50,3 +50,9 @@ The Comfy deployment proposal uses the v2 Linux artifact, an RTX PRO 6000 96 GB,
 ## Optional passwordless access
 
 `BOBHEAD_PUBLIC_DEMO=true` opens the studio without a password. This is public access: anyone who discovers the URL can use the shared paid-generation quota. Self-hosted copies remain password-protected by default. The owner explicitly enabled this setting on the hosted jury demo. A session secret is still required. Visitors receive separate signed cookies, so one visitor cannot view another visitor's uploads or results. Original signed-in sessions keep their existing files. Restoring `BOBHEAD_PUBLIC_DEMO=false` rejects anonymous sessions immediately. The rolling global generation limit and single-active-job limit continue to apply; the daily limit is not a dollar spending cap.
+
+## Checking generation activity
+
+In Render, open **bobhead-jury → Logs → Application logs**, choose the relevant time range and search for `generation_status`. Entries show a job ID, UTC start time, requested clip length, head scale and status (`starting`, `queued`, `running`, `complete`, `error`, `cancelled` or a recovery state). Completed jobs also include elapsed seconds. Repeated status changes belong to the same generation when their job ID matches. On restart, `generation_restored` entries summarize the job records still retained on disk; they do not start new generations. Prompts, filenames, visitor IDs, cookies, credentials and provider exception text are excluded.
+
+Render's **Events** page records hosting activity such as deployments and restarts, rather than individual video generations. Routine HTTP access logging is not enabled in the app. For GPU billing, check the Comfy deployment's usage. App job files and videos are retained for approximately 24 hours, so the saved job list is not a lifetime total.
