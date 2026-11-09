@@ -26,7 +26,7 @@ class PublicDemoTests(unittest.IsolatedAsyncioTestCase):
     async def visitor(self):
         response = await self.client.get('/', headers={'Host':'demo.example'})
         self.assertEqual(response.status, 200)
-        self.assertIn('Make me a bobhead', await response.text())
+        self.assertIn('id="generate"', await response.text())
         cookie = response.cookies['bobhead_session']
         self.assertTrue(cookie['secure'])
         self.assertTrue(cookie['httponly'])

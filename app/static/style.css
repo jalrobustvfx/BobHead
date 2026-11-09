@@ -15,3 +15,137 @@ dialog{max-width:550px;width:calc(100% - 36px);padding:34px;background:var(--whi
 .hero-title{min-width:0}
 
 .processing-estimate{font-size:11px;line-height:1.5;border:1px solid #380c1440;border-radius:7px;background:#ffffff45;padding:12px;margin:18px 0 0;color:var(--ink)}.processing-estimate strong{display:block;margin-bottom:4px}.processing-estimate+.generate{margin-top:12px}
+
+
+.workflow-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0 0 14px;
+  padding: 0;
+  list-style: none;
+}
+.workflow-steps li {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 48px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--white);
+  font-size: 13px;
+}
+.workflow-steps li[aria-current="step"] {
+  border-color: var(--ink);
+  background: var(--lime);
+}
+.workflow-steps li > span {
+  display: grid;
+  flex: 0 0 24px;
+  height: 24px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--white);
+  font-weight: 700;
+}
+.studio {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(235px, 285px);
+  grid-template-areas:
+    "title title settings"
+    "input result settings"
+    "progress progress settings"
+    "error error settings"
+    "footer footer settings"
+    ". . settings";
+  align-items: start;
+  gap: 14px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+.workspace-header { grid-area: title; margin: 0; }
+.input-card { grid-area: input; }
+.result-card { grid-area: result; }
+.studio > .progress-area { grid-area: progress; margin: 0; }
+.studio > .error { grid-area: error; margin: 0; }
+.workspace-footer { grid-area: footer; padding: 0; }
+.controls {
+  grid-area: settings;
+  display: flex;
+  border: 1px solid var(--ink);
+  border-radius: 10px;
+  padding: 18px;
+}
+.controls-title { margin-bottom: 8px; }
+.controls h2 { font-size: 27px; line-height: 1; }
+.control-bottom { margin-top: 14px; }
+.generate { min-height: 48px; font-size: 15px; }
+.generate-note { font-size: 12px; }
+.panel-heading { font-size: 10px; }
+.dropzone .choose-video {
+  display: inline-block;
+  padding: 12px 16px;
+  border-radius: 6px;
+  background: var(--lime);
+  color: var(--ink);
+  font-size: 18px;
+  letter-spacing: 0;
+}
+.dropzone > span:not(.upload-icon) { font-size: 12px; }
+.dropzone small { font-size: 9px; margin-top: 4px; }
+.upload-followup, .save-actions { padding: 12px; border-top: 1px solid var(--line); }
+.upload-followup p, .save-actions p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.upload-followup .secondary, #view-result { margin-top: 8px; }
+.save-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.save-actions p { flex-basis: 100%; }
+.save-actions #save-status { color: var(--ink); }
+.save-button, .save-actions .download, .upload-followup .secondary, #view-result {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 9px 12px;
+  border: 1px solid var(--ink);
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.save-button { background: var(--ink); color: var(--white); }
+.save-actions .download { background: var(--white); }
+#result-heading, #generation-heading { scroll-margin-top: 16px; }
+
+@media (max-width: 850px) {
+  .studio {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "title" "input" "settings" "error" "progress" "result" "footer";
+    padding: 14px;
+  }
+  .workspace-header h2 { max-width: none; }
+  .dropzone { height: 196px; gap: 8px; }
+  .input-card video, .result-card video { height: min(320px, 60vh); }
+  .result-placeholder { height: 200px; }
+  .bob-illustration { height: 120px; margin: 0; }
+  .controls { gap: 0; }
+  .controls-title .eyebrow, .controls > .control-hint, .duration-row + .control-hint { font-size: 12px; }
+  .duration-row { font-size: 14px; }
+  .duration-row input { font-size: 16px; }
+  .size-presets button, .advanced summary { min-height: 44px; font-size: 12px; }
+  .advanced summary { align-items: center; }
+  .size-control output { font-size: 56px; }
+  #replace-button { min-height: 44px; font-size: 12px; }
+}
+@media (max-width: 560px) {
+  .hero { padding: 19px 0 16px; }
+  .hero h1 { font-size: clamp(36px, 11vw, 55px); letter-spacing: -2px; }
+  .hero-copy { margin: 10px 0 0; }
+  .hero .eyebrow { margin-bottom: 8px; }
+  .workflow-steps { gap: 5px; }
+  .workflow-steps li { flex-direction: column; justify-content: center; gap: 5px; padding: 7px 4px; text-align: center; font-size: 11px; }
+  .workflow-steps li > span { flex: none; width: 22px; height: 22px; }
+}
