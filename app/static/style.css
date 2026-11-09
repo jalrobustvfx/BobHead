@@ -51,14 +51,13 @@ dialog{max-width:550px;width:calc(100% - 36px);padding:34px;background:var(--whi
   font-weight: 700;
 }
 .studio {
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(235px, 285px);
+  grid-template-columns: minmax(0, 1fr) minmax(235px, 285px) minmax(0, 1fr);
   grid-template-areas:
-    "title title settings"
-    "input result settings"
-    "progress progress settings"
-    "error error settings"
-    "footer footer settings"
-    ". . settings";
+    "title title title"
+    "input settings result"
+    "progress progress progress"
+    "error error error"
+    "footer footer footer";
   align-items: start;
   gap: 14px;
   padding: 20px;
